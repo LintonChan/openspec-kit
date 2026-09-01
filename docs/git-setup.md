@@ -20,7 +20,7 @@ brew install gh
 gh auth login        # 选 GitHub.com → HTTPS → 用浏览器登录，点一下就好
 ```
 
-`gh auth login` 会顺手把 git 的凭据助手也配好，之后 push / pull 都不再要密码。**比手动令牌省事，优先用这个。**
+`gh auth login` 会顺手把 git 的凭据助手也配好，之后 push / pull 都不再要密码。**GitHub 上这条比手动生成令牌省事**（GitHub 也支持手动令牌，想用照 Gitee 那节的思路配即可）。
 
 ### 仓在 Gitee —— 生成私人令牌
 
