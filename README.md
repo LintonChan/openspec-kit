@@ -1,6 +1,8 @@
 # openspec-kit
 
-产品需求的 **spec-driven 工作流种子仓**。国际中文事业部通用层，不含任何具体产品逻辑。
+产品需求的 **spec-driven 工作流种子仓**：一套让 AI 按流程产出需求规格与评审原型的规则 + 工具，不含任何具体产品逻辑。
+
+基于 [OpenSpec](https://github.com/Fission-AI/OpenSpec) 构建，为「多位 PM 共用一个需求事实源」这个场景补齐了流程闸门、评审闭环和原型生成。
 
 两个用途：
 

@@ -2,7 +2,7 @@
 
 本仓是产品的**需求事实源**，多位 PM 与研发共用。以下规则对所有 AI 会话生效，**优先级高于任何 skill、slash command 或工具自带的默认行为**。
 
-> 本文件由 [openspec-kit](https://gitee.com/chinesia_0/openspec-kit) 分发，属通用层。
+> 本文件由 **openspec-kit** 分发，属通用层——改动回 kit，再跑 `tools/sync-from-kit.sh` 推给各产品仓。
 > 产品特有的内容（业务背景、需求域、拆包方案）写在 `openspec/config.yaml` 的 `context:` 段，不要写进本文件。
 
 ---

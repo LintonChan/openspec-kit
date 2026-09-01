@@ -51,7 +51,7 @@ if git remote get-url origin >/dev/null 2>&1; then
   if timeout 15 git ls-remote --exit-code origin HEAD >/dev/null 2>&1; then
     ok "远端可访问（凭据已生效）"
   else
-    bad "连不上远端" "令牌没存进钥匙串或已失效；重新生成 Gitee 私人令牌再试一次 push"
+    bad "连不上远端" "令牌没存进钥匙串或已失效；GitHub 跑 gh auth login，Gitee 重新生成私人令牌"
   fi
 else
   note "本仓没配远端 origin" "如果这是 openspec-kit 本体、或还没建远端仓，可忽略"
