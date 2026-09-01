@@ -7,50 +7,62 @@
 
 ---
 
-## 一、装环境（一次性，约 5 分钟，你只需要粘一段话）
+## 一、下载（1 分钟，不需要账号）
 
-**不用自己敲命令。** 先做两件准备：
+打开 **<https://github.com/LintonChan/openspec-kit>** → 绿色 **Code** 按钮 → **Download ZIP** → 解压到你放项目的地方（比如 `~/repos/openspec-kit`）。
 
-1. **注册代码托管账号**，把用户名发给仓库管理员，等他把你加进产品仓（角色：**开发者 / Write**）
-2. **拿一个访问令牌**，照你们产品仓所在的平台来：
+习惯命令行的话一句话也行：
 
-   | 平台 | 怎么拿 |
-   |---|---|
-   | **Gitee** | 右上角头像 → 设置 → 安全设置 → 私人令牌 → 新建，权限只勾 `projects`，**复制（只显示一次）** |
-   | **GitHub** | 更省事：跳过令牌，装 `gh` 后跑 `gh auth login`，浏览器点一下就配好了（下面那段话里已经写了） |
-
-然后打开你惯用的 AI 工具（Cursor / Claude Code / Codex 都行），把下面这段**补全后发给它**：
-
-```text
-帮我配置 openspec 工作环境（macOS），逐步做完并在每步报告结果：
-
-1. 检查 node -v。没有的话：有 Homebrew 就 brew install node，
-   没有 Homebrew 就把 nodejs.org 的 LTS 下载链接给我，我自己装完再继续
-2. npm i -g @fission-ai/openspec，然后跑 openspec --version 确认
-3. 配 git 身份：姓名「你的中文名」，邮箱「你的公司邮箱」
-4. 配仓库凭据：
-   —— 仓在 GitHub：brew install gh，然后让我自己跑 gh auth login（要点浏览器）
-   —— 仓在 Gitee：把令牌存进 macOS 钥匙串，用户名「你的用户名」，令牌「粘贴令牌」
-5. git clone <你们产品仓的地址> 到 ~/repos/
-6. cd 进去跑 tools/doctor.sh，把自检结果给我
-
-令牌等同密码，只在本机用，不要写进任何文件。
+```bash
+git clone https://github.com/LintonChan/openspec-kit.git ~/repos/openspec-kit
 ```
 
-⚠️ **令牌只粘给你本机的 AI 会话**，不要发群里、不要存文档。
+公开仓，**不需要 GitHub 账号、不需要登录、不需要令牌**。
 
-**不用装的**：
-
-- ❌ proto-gen 原型 skill —— 已在仓里，clone 即用
-- ❌ 任何规范文档 —— 已在 `AGENTS.md` 与 `openspec/config.yaml`，AI 自动读取遵守
-
-> 装完想复查、或以后觉得哪里不对劲，随时在仓根跑 `tools/doctor.sh`，它会逐项告诉你缺什么。
+> 已经在你们自己的产品仓里干活的：跳过本步，直接用那个仓，下面的内容完全一样。
 
 ---
 
-## 二、打开仓库（1 分钟）
+## 二、让 AI 读规则并装环境（约 5 分钟，你只需要粘一段话）
 
-用你惯用的 AI 工具打开**仓根目录**（不是子目录，否则读不到 `AGENTS.md`）。七家工具都已配好入口：
+**用你惯用的 AI 工具打开刚解压出来的那个文件夹**（Cursor / Claude Code / Codex 都行）。
+
+⚠️ **必须打开文件夹的最外层**（能看到 `AGENTS.md` 那一层），不是里面的子目录——否则 AI 读不到规则，后面全乱。
+
+然后把下面这段**原样发给它**：
+
+```text
+请先完整读这三个文件，再动手：
+1. AGENTS.md —— 你在本仓的工作规则，尤其第一节「流程闸门」和第二节「画原型」
+2. QUICKSTART.md —— 我要跑的七步流程
+3. openspec/config.yaml —— 项目背景与起草规则
+
+读完后帮我把环境装上（macOS），每步报告结果：
+- 检查 node -v，没有就 brew install node（没有 Homebrew 就给我 nodejs.org 的链接）
+- npm i -g @fission-ai/openspec，跑 openspec --version 确认
+- 跑 tools/doctor.sh，把自检结果给我
+
+装完不要自己往下做，等我说下一步。
+```
+
+**为什么要它先读文件**：这套流程的规则全在 `AGENTS.md` 里（比如「一次只做一个包，做完停下来等我」）。AI 不读就不知道有这些约束，会一路自己往下做——这是最常见的翻车原因。
+
+**不用装的**：
+
+- ❌ proto-gen 原型 skill —— 已在文件夹里，开箱即用
+- ❌ 任何规范文档 —— 已在 `AGENTS.md` 与 `openspec/config.yaml`，AI 会自己读
+
+> 以后觉得哪里不对劲，随时跑 `tools/doctor.sh`，它会逐项告诉你缺什么。
+
+### 什么时候才需要配 git 凭据
+
+**练习阶段不用。** 下载下来的文件夹在本机跑完整套流程完全没问题。
+
+等到你要把结论**推给团队**（真正在产品仓里干活）时，才需要配一次凭据——照 [docs/git-setup.md](docs/git-setup.md) 走，Gitee / GitHub 各有一段，用你们产品仓所在的那个。
+
+### 你的工具有哪些入口
+
+七家 AI 工具都已配好，不用额外装：
 
 | 你用的工具 | 打开后可用 |
 |---|---|
@@ -58,7 +70,7 @@
 | Cursor / Trae | `/opsx-propose` `/opsx-apply` `/opsx-archive` … |
 | Codex / Windsurf | 无斜杠命令，直接说「我要提一个新变更」 |
 
-> ⚠️ **不要跑 `openspec init`** —— 根已经初始化并提交，重跑会重置全仓配置。
+> ⚠️ **不要跑 `openspec init`** —— 配置已经在文件夹里了，重跑会把它全部重置。
 
 ---
 
@@ -78,9 +90,11 @@ openspec/
 
 **三层关系**：需求清单说「做什么」→ 变更包说「这次怎么做」→ 归档后并进现行账本说「系统现在是什么样」。
 
-### 打开 requirements.md 你会看到别人的需求 —— 这是对的
+### 打开 requirements.md 你会看到已经有内容 —— 这是对的
 
-**你的需求也写进这一份，不要新建自己的。** 因为需求域是按**能力**切的，共享底座（账号 / 后台 / 官网这类）若每人一份，会被复制成 N 份然后各自漂移。
+**下载的 kit 里装的是练习用的玩具需求**（团队会议室预订，4 个需求点）。它**故意留了洞**——列表五要素没写全、输入框没定字符上限、取消没说要不要二次确认。AI 应当把这些问出来，**它没问就是流程没走对**，这是练习的考点。
+
+**在团队产品仓里，你看到的会是同事们的真实需求。你的需求也写进那同一份，不要新建自己的。** 因为需求域是按**能力**切的，共享底座（账号 / 后台 / 官网这类）若每人一份，会被复制成 N 份然后各自漂移。
 
 编号规则见 [collaboration-convention.md](openspec/conventions/collaboration-convention.md) 第五节。**动手前先通读现有全部域**，别开出跟别人重叠的新域；拿不准群里问一句。
 
@@ -106,7 +120,10 @@ openspec/
 
 ## 四、跑 propose：把真实需求变成变更包（约 20 分钟）
 
-先 `git pull`，看一眼 `openspec/changes/` 现有最大序号，你的新包接着排。
+看一眼 `openspec/changes/` 现有最大序号，你的新包接着排。
+
+> 在团队的产品仓里干活时，这一步之前**先 `git pull`**——别人可能刚建了包，撞号了要改名。
+> 拿下载的 kit 练习时没有远端，跳过 pull 就行。
 
 然后对 AI 说（用你自己的话描述需求，越具体越好）：
 
@@ -194,12 +211,16 @@ proto-gen 会产出自包含的 HTML（双击即开），放在 `openspec/protot
 
 ## 七、交付给研发
 
+> **练习到第六步就算跑完了。** 本步是真正在团队产品仓里干活时才做的，练习阶段可以只看不做。
+
 按 [publish-convention.md](openspec/conventions/publish-convention.md) 发布原型链接给相关人，然后：
 
 ```bash
 git pull --rebase        # 先吃掉别人的提交
 git push                 # 你的结论别人才看得到
 ```
+
+推送需要凭据，还没配的照 [docs/git-setup.md](docs/git-setup.md) 走一遍（一次配好，终身无感）。
 
 研发侧：clone 本仓到代码仓同级目录，读 `changes/NN-xxx/specs/` 实现，完成一项勾一项 `tasks.md`。
 
@@ -212,6 +233,8 @@ openspec archive <你的包名>      # delta 并入 specs/，包移进 changes/a
 ---
 
 ## 跑完之后：日常两个动作
+
+（在团队产品仓里干活时）
 
 ```bash
 git pull      # 开工前
@@ -227,7 +250,7 @@ git push      # 收工后
 | 现象 | 原因 | 处理 |
 |---|---|---|
 | **AI 不问就开了下一个包** | 它违反了 AGENTS.md 第一节；`opsx-propose` 自带的 `keep momentum` 在诱导它 | 把 AGENTS.md 第一节甩给它，让它退回来 |
-| **原型是一张光秃秃的网页**，没有右侧 PRD 面板 | AI 没读 proto-gen 的 SKILL.md（Codex 无自动发现机制） | 让它先完整读 `.codex/skills/proto-gen/SKILL.md`（或你的工具对应路径）再重做 |
+| **原型是一张光秃秃的网页**，没有右侧 PRD 面板 | AI 没读 proto-gen 的 SKILL.md（Codex 无自动发现机制） | 让它先完整读 `.agent-skills/proto-gen/SKILL.md` 再重做 |
 | 跑了 `openspec init` 把配置搞乱了 | 根已初始化，不该重跑 | `git checkout openspec/config.yaml` 还原 |
 | 想改别人包里的东西 | 一包一 Owner | 找 Owner，别直接改（见协作规范第二节） |
 | 需要别人包的接口 | 不读对方 spec | 读 `openspec/contracts/`，没有就找对方要（见协作规范第三节） |
