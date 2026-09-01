@@ -7,34 +7,43 @@
 
 ---
 
-## 一、装环境（一次性，约 10 分钟）
+## 一、装环境（一次性，约 5 分钟，你只需要粘一段话）
 
-```bash
-# 1. 检查 node —— 没输出就去 nodejs.org 装 LTS 版
-node -v
+**不用自己敲命令。** 先做两件准备：
 
-# 2. 装 openspec CLI（唯一需要安装的东西）
-npm i -g @fission-ai/openspec
-openspec --version      # 有版本号即成功
+1. **注册 Gitee** 并把用户名发给仓库管理员，等他把你加进仓库（角色：开发者）
+2. **生成私人令牌**：Gitee 右上角头像 → 设置 → 安全设置 → 私人令牌 → 新建，权限只勾 `projects`，**复制令牌（只显示一次）**
+
+然后打开你惯用的 AI 工具（Cursor / Claude Code / Codex 都行），把下面这段**补全后发给它**：
+
+```text
+帮我配置 openspec 工作环境（macOS），逐步做完并在每步报告结果：
+
+1. 检查 node -v。没有的话：有 Homebrew 就 brew install node，
+   没有 Homebrew 就把 nodejs.org 的 LTS 下载链接给我，我自己装完再继续
+2. npm i -g @fission-ai/openspec，然后跑 openspec --version 确认
+3. 配 git 身份：姓名「你的中文名」，邮箱「你的公司邮箱」
+4. 把 Gitee 令牌存进 macOS 钥匙串：用户名「你的 Gitee 用户名」，令牌「粘贴令牌」
+5. git clone <你们产品仓的地址> 到 ~/repos/
+6. cd 进去跑 tools/doctor.sh，把自检结果给我
+
+令牌等同密码，只在本机用，不要写进任何文件。
 ```
 
-**3. 配 git 凭据** —— 照 [docs/git-setup.md](docs/git-setup.md) 走一遍（私人令牌 + 钥匙串，配一次永久生效）。
+⚠️ **令牌只粘给你本机的 AI 会话**，不要发群里、不要存文档。
 
 **不用装的**：
 
 - ❌ proto-gen 原型 skill —— 已在仓里，clone 即用
 - ❌ 任何规范文档 —— 已在 `AGENTS.md` 与 `openspec/config.yaml`，AI 自动读取遵守
 
+> 装完想复查、或以后觉得哪里不对劲，随时在仓根跑 `tools/doctor.sh`，它会逐项告诉你缺什么。
+
 ---
 
-## 二、clone（约 1 分钟）
+## 二、打开仓库（1 分钟）
 
-```bash
-git clone <你们产品仓的地址>
-cd <仓名>
-```
-
-用你惯用的 AI 工具打开**仓根目录**（不是子目录）。七家工具都已配好入口：
+用你惯用的 AI 工具打开**仓根目录**（不是子目录，否则读不到 `AGENTS.md`）。七家工具都已配好入口：
 
 | 你用的工具 | 打开后可用 |
 |---|---|

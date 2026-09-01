@@ -34,6 +34,7 @@ SYNC_FILES=(
   openspec/conventions/review-convention.md
   openspec/conventions/publish-convention.md
   tools/sync-proto-gen.sh
+  tools/doctor.sh
   tools/sync-from-kit.sh
   tools/init-new-repo.sh
   docs/git-setup.md
