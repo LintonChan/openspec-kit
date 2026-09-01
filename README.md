@@ -4,11 +4,23 @@
 
 基于 [OpenSpec](https://github.com/Fission-AI/OpenSpec) 构建，为「多位 PM 共用一个需求事实源」这个场景补齐了流程闸门、评审闭环和原型生成。
 
-两个用途：
+## 怎么拿
+
+公开仓，**不需要账号、不需要认证**：
+
+```bash
+git clone https://github.com/<owner>/openspec-kit.git
+cd openspec-kit
+tools/doctor.sh          # 看看本机环境缺什么
+```
+
+或者在本页点 **Code → Download ZIP**，解压即可。
+
+## 两个用途
 
 | 用途 | 怎么用 |
 |---|---|
-| **培训新同事** | clone 下来，拿自带的玩具需求（团队会议室预订）跑完 [QUICKSTART.md](QUICKSTART.md) 七步 |
+| **培训新同事** | 拿自带的玩具需求（团队会议室预订）跑完 [QUICKSTART.md](QUICKSTART.md) 七步 |
 | **起一条新产品线的需求仓** | `tools/init-new-repo.sh ~/repos/xxx-openspec "产品名"`，玩具需求会被清空 |
 
 > ⚠️ **起新仓前先回答**：新产品线用不用现有仓的底座能力（账号 / 权限 / 后台 / 官网…）？
