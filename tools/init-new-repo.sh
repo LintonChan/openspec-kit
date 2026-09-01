@@ -63,7 +63,14 @@ import re, sys, pathlib
 product = sys.argv[1]
 p = pathlib.Path('openspec/config.yaml')
 s = p.read_text(encoding='utf-8')
-placeholder = f'''context: |
+placeholder = f'''# ─────────────────────────────────────────────────────────────────────────────
+# context：创建 change / spec 时注入给 AI 的项目背景。本段是本仓**产品特有**的，
+# 不随 tools/sync-from-kit.sh 同步——放心改。
+#
+# 产品特有的起草规则也写进本段的「纪律」小节，
+# MUST NOT 写进下面的 rules:（那是通用层，同步时会被 kit 覆盖）。
+# ─────────────────────────────────────────────────────────────────────────────
+context: |
   # 组织与产品线
   {product} —— 【待填：一句话说清这是什么产品、用户是谁、解决什么问题】
   【待填：有没有共用别的产品线的底座能力？共用哪些？】
@@ -89,7 +96,22 @@ placeholder = f'''context: |
   - specs/ 是现行规格账本，只随 change 归档更新，不手改。
   - 二期需求点不进本期 change。
 '''
-s = re.sub(r'^context: \|\n(?:  .*\n|\n)*', placeholder, s, count=1, flags=re.M)
+# 连同 context: 上方紧贴的注释块一起替换（否则 kit 的培训说明会残留）
+m = re.search(r'^context: \|$', s, re.M)
+if not m:
+    sys.exit('✗ config.yaml 里找不到 context: |')
+head = s[:m.start()].rstrip('\n').split('\n')
+take = 0
+for line in reversed(head):
+    if line.startswith('#'):
+        take += 1
+    else:
+        break
+start = len('\n'.join(head[:len(head) - take])) if take else m.start()
+if take and start:
+    start += 1
+body = re.match(r'context: \|\n(?:  .*\n|\n)*', s[m.start():])
+s = s[:start] + placeholder + s[m.start() + body.end():]
 p.write_text(s, encoding='utf-8')
 print('  ✓ config.yaml 的 context 已换成占位')
 PY
