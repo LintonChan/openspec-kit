@@ -28,6 +28,8 @@ SYNC_FILES=(
   CLAUDE.md
   QUICKSTART.md
   openspec/AGENTS.md
+  .cursor/rules/openspec-workflow.mdc
+  docs/where-rules-live.md
   openspec/conventions/collaboration-convention.md
   openspec/conventions/review-convention.md
   openspec/conventions/publish-convention.md

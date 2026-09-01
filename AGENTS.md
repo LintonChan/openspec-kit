@@ -56,17 +56,15 @@
 
 ### MUST 做的第一件事
 
-**先用文件读取工具完整读一遍 SKILL.md，再动手。** 按你正在用的工具选路径（都是同一份内容）：
+**用文件读取工具完整读一遍这个文件，再动手**（相对仓根的固定路径，**不要**去判断自己正跑在哪个 AI 工具里）：
 
-| 工具 | 路径 |
-|---|---|
-| Claude Code | `.claude/skills/proto-gen/SKILL.md` |
-| Cursor | `.cursor/skills/proto-gen/SKILL.md` |
-| Codex | `.codex/skills/proto-gen/SKILL.md` |
-| Trae / Windsurf / 通义灵码 / Qoder | `<对应工具目录>/skills/proto-gen/SKILL.md` |
-| 都不匹配 | `.agent-skills/proto-gen/SKILL.md`（工具无关基准副本） |
+```
+.agent-skills/proto-gen/SKILL.md
+```
 
-**MUST NOT 依赖自动触发。** 部分工具（Codex 尤其）没有 skill 自动发现机制，`skills/` 目录对它就是一堆普通文件——不主动读就等于不存在，结果是你手写一个普通 HTML 交上去，缺三段结构、缺 PRD 面板、缺样式注入，评审时才被发现要重做。
+这是工具无关的基准副本。各工具目录下的 `.claude/skills/proto-gen/`、`.cursor/skills/proto-gen/`、`.codex/skills/proto-gen/` … 是它的同内容拷贝，读哪份都一样——**读上面这一份最省事，因为它一定存在**。
+
+**MUST NOT 依赖 skill 自动触发。** 部分工具（Codex 尤其）没有 skill 发现机制，`skills/` 目录对它就是一堆普通文件——不主动读就等于不存在，结果是你手写一个普通 HTML 交上去，缺三段结构、缺 PRD 面板、缺样式注入，评审时才被发现要重做。
 
 SKILL.md 里还会指向 `references/` 下的细则（页面骨架、组件类名、PRD 写法），**按它的指引读，不要凭印象写**。
 

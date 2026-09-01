@@ -40,12 +40,13 @@ REPO=$(git -C "$(dirname "$(readlink -f openspec/config.yaml 2>/dev/null || echo
 
 ## 二、画原型：动手前 MUST 先完整读 proto-gen 的 SKILL.md
 
-用户说「出原型」「画原型」「做个原型」「做个页面」或任何要产出可视化界面的任务 → **第一件事是完整读一遍 SKILL.md**：
+用户说「出原型」「画原型」「做个原型」「做个页面」或任何要产出可视化界面的任务 → **第一件事是完整读一遍 SKILL.md**，路径固定，**不要去判断自己跑在哪个 AI 工具里**：
 
+```text
+<仓根>/.agent-skills/proto-gen/SKILL.md
 ```
-<仓根>/.agent-skills/proto-gen/SKILL.md        ← 工具无关基准副本
-<仓根>/.claude|.cursor|.codex|…/skills/proto-gen/SKILL.md   ← 各工具副本，内容相同
-```
+
+各工具目录下的 `skills/proto-gen/` 是同内容拷贝，读上面这一份最省事——它一定存在。
 
 **MUST NOT 依赖自动触发**——部分工具（Codex 尤其）没有 skill 发现机制，不主动读就等于不存在，结果是手写一个普通 HTML，缺三段结构、缺 PRD 面板、缺样式注入，评审时才发现要重做。
 

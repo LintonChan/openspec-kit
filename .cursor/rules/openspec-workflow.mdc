@@ -1,0 +1,39 @@
+---
+description: 本仓的流程闸门与 proto-gen 强制入口（完整规则见仓根 AGENTS.md）
+alwaysApply: true
+---
+
+# 本仓两条硬规则
+
+完整规则见仓根 `AGENTS.md`，本文件只重复最容易被违反的两条。
+
+## 一、一次只做一个变更包，做完必须停
+
+三个强制停点，每处 MUST 停下等用户，MUST NOT 自行推进：
+
+1. **四件套出完** → 报告产出 + 「评审待定项」清单 → **问用户是否现在出评审原型**
+2. **原型出完** → 报告 section 清单 + 待评审项 + 闭环审计结果 → **停下等评审**
+3. **评审决议执行完** → 给对照表（决议 → 落点 → 状态）→ **等用户回复签字**，不自己改状态
+
+- 拆包方案里列了 N 个包也一样，**MUST 只做当前这一个**
+- 未签字的包，**MUST NOT 开下一个包**
+- 「评审待定项」**MUST NOT 由 AI 拍板**
+- 用户说「继续」时 **MUST 先确认**：是继续当前包的下一阶段，还是开下一个包
+
+`opsx-propose` 里那句 `prefer making reasonable decisions to keep momentum` **在本仓不成立**——这里的产出物是需求事实源，研发直接照着实现，埋错的代价是推翻整个包。
+
+## 二、画原型前 MUST 先读 SKILL.md
+
+用户说「出原型」「画原型」「做个页面」或任何要产出可视化界面的任务，**第一件事是完整读**：
+
+```text
+.agent-skills/proto-gen/SKILL.md
+```
+
+路径固定，不要判断自己跑在哪个工具里。**MUST NOT 自己手写 HTML。**
+
+产物验收三条，缺一即为没走 skill，MUST 重做：
+
+1. `<head>` 三对注入标记块已回填：`@proto-gen:theme` / `shared` / `highlight`
+2. 每个 section = macos-window 外壳 + 右侧 360px `prd-panel` 一一对应
+3. 顶部有 48px 固定导航栏

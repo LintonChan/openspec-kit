@@ -67,13 +67,22 @@ specs/            说「系统现在是什么样」 知识层 · 只由 archive 
 
 七家工具都配好了入口，clone 即用：
 
-| 工具 | 斜杠命令 | proto-gen |
+| 工具 | 斜杠命令 | 规则怎么进到 AI 眼里 |
 |---|---|---|
-| Claude Code / 通义灵码 / Qoder | `/opsx:propose` `/opsx:apply` `/opsx:archive` … | 自动发现 |
-| Cursor / Trae | `/opsx-propose` `/opsx-apply` … | 自动发现（需较新版本） |
-| Codex / Windsurf | 无斜杠命令，直接说「我要提一个新变更」 | **不自动发现**，靠 AGENTS.md 第二节强制 AI 主动读 |
+| Claude Code / 通义灵码 / Qoder | `/opsx:propose` `/opsx:apply` … | `CLAUDE.md` → `@AGENTS.md`；skill 自动发现 |
+| Cursor / Trae | `/opsx-propose` `/opsx-apply` … | 仓根 `AGENTS.md` 自动读 **＋** `.cursor/rules/openspec-workflow.mdc`（`alwaysApply`） |
+| Codex / Windsurf | 无斜杠命令，直接说「我要提一个新变更」 | 仓根 `AGENTS.md` 自动读（Codex 每次 run 都重建指令链） |
 
-> Codex 没有 skill 自动发现机制。[AGENTS.md](AGENTS.md) 第二节写了显式路径要求 AI 动手前先读 SKILL.md —— **这一节不能删**，删了 Codex 用户画出来的原型会缺三段结构和 PRD 面板。
+### 规则触达是四层，不是一层
+
+AI 不"调用" proto-gen skill——它是**被规则文件指使去读一个普通文件**，绕开了所有 skill 发现机制。四层保险从硬到软：
+
+1. **`.cursor/rules/*.mdc`**（Cursor 原生机制，`alwaysApply: true`）
+2. **`AGENTS.md`** —— Codex / Cursor 都无需配置自动读；`openspec/AGENTS.md` 是就近副本，解决从软链进目录时读不到仓根的问题
+3. **提示词里直接点名文件**（[QUICKSTART](QUICKSTART.md) 第五步给了可复制的话）—— 最可靠，不依赖任何自动机制
+4. **验收判据**（三条，肉眼可查）—— 事后兜底
+
+> [AGENTS.md](AGENTS.md) 第二节给的是**工具无关路径** `.agent-skills/proto-gen/SKILL.md`，**不要改成让 AI 自己判断"我是哪家工具"再选路径**——AI 未必认得出自己跑在哪里。这一节删了，Codex 用户画出来的原型会缺三段结构和 PRD 面板。
 
 ---
 

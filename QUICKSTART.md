@@ -128,8 +128,10 @@ openspec validate <你的包名> --strict
 ## 五、出评审原型（约 10 分钟）
 
 ```
-生成 NN-xxx 的评审原型
+先完整读 .agent-skills/proto-gen/SKILL.md，然后按它生成 NN-xxx 的评审原型
 ```
+
+> **为什么要在提示词里带上那句「先完整读」**：AI 是靠 `AGENTS.md` 第二节被告知有 proto-gen 这套东西的，但指令遵循不是 100%。**提示词里直接点名文件是最可靠的一层**，多打半句话，省掉一次返工。习惯了之后直接说「生成 NN-xxx 的评审原型」通常也行——但**验收判据每次都要查**。
 
 proto-gen 会产出自包含的 HTML（双击即开），放在 `openspec/prototypes/NN-xxx/`，目录与文件名 MUST 与变更包同名。
 
