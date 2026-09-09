@@ -23,8 +23,8 @@ REPO=$(git -C "$(dirname "$(readlink -f openspec/config.yaml 2>/dev/null || echo
 
 **三个强制停点**，每个停点 AI 都 MUST 停下等用户，MUST NOT 自行推进：
 
-1. **四件套出完** → 报告产出 + 「评审待定项」清单 → **问用户是否现在出评审原型**
-2. **原型出完** → 报告 section 清单 + 待评审项 + 闭环审计结果 → **停下等评审**
+1. **四件套出完** → 报告产出 + 「评审待定项」清单 + **确认评审产出物类型（界面原型 / 策略说明，见第二节）** → **问用户是否现在出**
+2. **产出物出完** → 报告清单 + 待评审项 + 闭环审计结果 → **停下等评审**
 3. **评审决议执行完** → 给对照表（决议 → 落点 → 状态）→ **等用户回复签字**，AI 不自己改状态
 
 **硬规则**：
@@ -38,7 +38,22 @@ REPO=$(git -C "$(dirname "$(readlink -f openspec/config.yaml 2>/dev/null || echo
 
 ---
 
-## 二、画原型：动手前 MUST 先完整读 proto-gen 的 SKILL.md
+## 二、评审产出物：先分岔，再动手
+
+**不是每个变更包都有界面。** 两类产物**都是 `prototypes/NN-xxx/NN-xxx.html`**，都走 proto-gen 的主题与注入流程，**区别只在每个 section 里装什么**。
+
+判据：**产出物里有没有用户或运营会直接看到的界面？**
+
+| | 类型 | section 里装什么 |
+|---|---|---|
+| 有（用户端页面、后台页面） | **界面原型** | macos-window 外壳 + 右侧 360px prd-panel |
+| 没有（策略 / 算法 / 契约 / 非功能） | **策略说明** | 规则说明块，**不套 macos-window / prd-panel**；四段结构与 UML 选型见 `config.yaml` 的 `rules.prototypes` |
+
+- 类型应在**拆包方案或 proposal 里已标注**；没标注就**问用户，MUST NOT 默认成界面原型**
+- 类型一经确认，**AI 不得自行改判**
+- **两类都要先读 SKILL.md**——策略型也要用同一套主题、组件类名与注入流程
+
+### 界面原型：动手前 MUST 先完整读 proto-gen 的 SKILL.md
 
 用户说「出原型」「画原型」「做个原型」「做个页面」或任何要产出可视化界面的任务 → **第一件事是完整读一遍 SKILL.md**，路径固定，**不要去判断自己跑在哪个 AI 工具里**：
 
@@ -52,9 +67,11 @@ REPO=$(git -C "$(dirname "$(readlink -f openspec/config.yaml 2>/dev/null || echo
 
 **验收三条**（不满足即为没走 skill，MUST 重做）：
 
-1. `<head>` 三对注入标记块已回填：`@proto-gen:theme` / `shared` / `highlight`
-2. 每个 section = macos-window 外壳 + 右侧 360px `prd-panel` 一一对应
-3. 顶部有 48px 固定导航栏
+1. `<head>` 三对注入标记块已回填：`@proto-gen:theme` / `shared` / `highlight`　（两类都要）
+2. 顶部有 48px 固定导航栏　（两类都要）
+3. 按类型分：
+   - **界面型** = 每个 section 是 macos-window 外壳 + 右侧 360px `prd-panel` 一一对应
+   - **策略型** = 每个 section 是规则说明块（**不得留空的 macos-window / prd-panel 壳**），四段齐全（输入输出 / 规则正文 / 边界异常 / 可配置项），图自包含不引 CDN
 
 ---
 

@@ -13,6 +13,7 @@
 | **产品背景** —— 只对本产品仓成立 | `openspec/config.yaml` 的 `context:` 段 | 创建 change / spec 时注入 | 业务线有哪几条、需求域怎么划、拆包方案、领域术语、单位约定 |
 | **多步骤长流程** —— 几百字讲不完的 | `openspec/conventions/` 三份之一 | AI 按需打开（`AGENTS.md` 里留指针） | 评审七步闭环；发布分发流程；目录所有权与冲突避免 |
 | **原型怎么画** | proto-gen 的 `SKILL.md` / `references/`，**真身在 `~/repos/claude-skills/proto-gen`** | 画原型时读（由 `AGENTS.md` 第二节强制） | 三段结构契约；四条铁律；组件类名；PRD 面板写法 |
+| **评审产出物是界面原型还是策略说明** | 判据与闸门在 `AGENTS.md` 第二节开头；两类各自的写法在 `config.yaml` 的 `rules.prototypes` | 闸门每次会话读；写法在起草时由 CLI 注入 | 有没有用户会看到的界面；策略型的四段结构；UML 选型；产物必须自包含 |
 | **需求本身** | `openspec/requirements.md` | 需求事实源，全程 | 具体需求点 |
 
 ---
