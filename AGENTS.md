@@ -163,7 +163,7 @@ git push
 | `requirements.md` | 各 PM 只改自己需求域的行 |
 | `review-raw/` | 全局共用，只增不改不删 |
 | `specs/` | **只由 `openspec archive` 写，任何人不手改** |
-| `conventions/`、`tools/`、`config.yaml`、`AGENTS.md` | 体系 Owner |
+| `conventions/`、`assets/`、`tools/`、`config.yaml`、`AGENTS.md` | 体系 Owner |
 
 **要改的文件不属于当前用户 Owner 的包 → 先提醒用户，别直接改。**
 

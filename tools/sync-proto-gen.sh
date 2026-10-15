@@ -32,10 +32,12 @@ while IFS= read -r _d; do TOOL_DIRS+=("$_d"); done \
 
 if [[ $CHECK_ONLY -eq 1 ]]; then
   drift=0
-  rsync -rn --delete --itemize-changes "${EXCLUDES[@]}" "$SRC/" "$BASE/" | grep -q . && {
+  # 按内容比（-c），且只认行首非「.」的条目：「.f..T」只是修改时间不同——
+  # git clone / pull 出来的文件 mtime 都是检出时刻，按时间比会让每个新 clone 都误报
+  rsync -rnc --delete --itemize-changes "${EXCLUDES[@]}" "$SRC/" "$BASE/" | grep -q '^[^.]' && {
     echo "✗ .agent-skills/proto-gen 与上游不一致"; drift=1; }
   for d in "${TOOL_DIRS[@]}"; do
-    rsync -rn --delete --itemize-changes "$BASE/" "$d/proto-gen/" | grep -q . && {
+    rsync -rnc --delete --itemize-changes "$BASE/" "$d/proto-gen/" | grep -q '^[^.]' && {
       echo "✗ ${d#$REPO/}/proto-gen 与基准不一致"; drift=1; }
   done
   [[ $drift -eq 0 ]] && echo "✓ proto-gen 全部同步" || echo "  → 跑 tools/sync-proto-gen.sh 修复"
