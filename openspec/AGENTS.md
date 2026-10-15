@@ -65,6 +65,15 @@ REPO=$(git -C "$(dirname "$(readlink -f openspec/config.yaml 2>/dev/null || echo
 
 **MUST NOT 依赖自动触发**——部分工具（Codex 尤其）没有 skill 发现机制，不主动读就等于不存在，结果是手写一个普通 HTML，缺三段结构、缺 PRD 面板、缺样式注入，评审时才发现要重做。
 
+**管理后台页面 MUST 套 admin-kit**（yudao / Element Plus 形态），不用 proto-gen 默认紫主题：先读 `<仓根>/openspec/assets/admin-kit/README.md`，从 `crud-template.html` 复制起步，注入跑两条且**顺序不能反**：
+
+```bash
+<仓根>/.agent-skills/proto-gen/assets/inject-assets.mjs <仓根>/openspec/prototypes/NN-xxx/
+<仓根>/openspec/assets/admin-kit/sync-theme.mjs <仓根>/openspec/prototypes/NN-xxx/
+```
+
+缺组件加进 `admin-shell.css`，不在页面里重定义 `.yd-*`；admin-kit 由 openspec-kit 分发，改动回 kit。
+
 **验收三条**（不满足即为没走 skill，MUST 重做）：
 
 1. `<head>` 三对注入标记块已回填：`@proto-gen:theme` / `shared` / `highlight`　（两类都要）
@@ -72,6 +81,8 @@ REPO=$(git -C "$(dirname "$(readlink -f openspec/config.yaml 2>/dev/null || echo
 3. 按类型分：
    - **界面型** = 每个 section 是 macos-window 外壳 + 右侧 360px `prd-panel` 一一对应
    - **策略型** = 每个 section 是规则说明块（**不得留空的 macos-window / prd-panel 壳**），四段齐全（输入输出 / 规则正文 / 边界异常 / 可配置项），图自包含不引 CDN
+
+后台页面另加：`@admin-theme` / `@admin-shell` 已回填且排在 `@proto-gen:theme` 之后（主色 EP 蓝 `#409eff`，不是紫色）。
 
 ---
 

@@ -33,6 +33,12 @@ SYNC_FILES=(
   openspec/conventions/collaboration-convention.md
   openspec/conventions/review-convention.md
   openspec/conventions/publish-convention.md
+  # 管理后台原型底座：各产品仓后台形态必须一致（yudao / Element Plus）
+  openspec/assets/admin-kit/README.md
+  openspec/assets/admin-kit/admin-theme.css
+  openspec/assets/admin-kit/admin-shell.css
+  openspec/assets/admin-kit/crud-template.html
+  openspec/assets/admin-kit/sync-theme.mjs
   tools/sync-proto-gen.sh
   tools/doctor.sh
   tools/sync-from-kit.sh
@@ -47,7 +53,14 @@ drift=0
 # ── 整文件同步 ──────────────────────────────────────────────────────────────
 for f in "${SYNC_FILES[@]}"; do
   [[ -f "$KIT/$f" ]] || { echo "⚠ kit 里没有 $f，跳过"; continue; }
-  if [[ -f "$REPO/$f" ]] && cmp -s "$KIT/$f" "$REPO/$f"; then continue; fi
+  if [[ -f "$REPO/$f" ]] && cmp -s "$KIT/$f" "$REPO/$f"; then
+    # 内容一致但丢了执行位（手工复制进来的常见）：cmp 看不出，单独补
+    if [[ -x "$KIT/$f" && ! -x "$REPO/$f" ]]; then
+      if [[ $CHECK_ONLY -eq 1 ]]; then echo "✗ 缺执行位：$f"; drift=1
+      else chmod +x "$REPO/$f"; echo "✓ 补执行位 $f"; fi
+    fi
+    continue
+  fi
   if [[ $CHECK_ONLY -eq 1 ]]; then
     echo "✗ 与 kit 不一致：$f"; drift=1
   else

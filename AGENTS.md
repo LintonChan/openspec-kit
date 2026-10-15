@@ -85,6 +85,20 @@
 
 SKILL.md 里还会指向 `references/` 下的细则（页面骨架、组件类名、PRD 写法），**按它的指引读，不要凭印象写**。
 
+### 管理后台页面：MUST 套 admin-kit，不用 proto-gen 默认紫主题
+
+后台形态对齐研发选定的 yudao-ui-admin-vue3（Element Plus），主题与外壳组件的单一事实源在 `openspec/assets/admin-kit/`。**动手前读一遍它的 `README.md`**——搜索区不可折叠、表头白底、弹窗页脚「确定」在左这类框架形态都在那张易错表里。
+
+1. **从 `admin-kit/crud-template.html` 复制起步**，只改搜索字段 / 表格列与操作项 / 弹窗表单字段；外壳、间距、按钮排布、分页、弹窗页脚**一律不动**
+2. 注入跑两条，**顺序不能反**（第二条覆盖第一条的紫主题）：
+
+   ```bash
+   .agent-skills/proto-gen/assets/inject-assets.mjs openspec/prototypes/NN-xxx/
+   openspec/assets/admin-kit/sync-theme.mjs openspec/prototypes/NN-xxx/
+   ```
+
+3. 缺组件 → 加进 `admin-shell.css`，**不要在页面样式里重定义 `.yd-*`**；admin-kit 由 openspec-kit 分发，改动回 kit
+
 ### 验收判据（人和 AI 都用这三条自查）
 
 产物不满足任意一条，就是**没走 skill**，MUST 重做：
@@ -99,6 +113,10 @@ SKILL.md 里还会指向 `references/` 下的细则（页面骨架、组件类�
 
 3. **界面型** —— 每个 section 是 **macos-window 外壳 + 右侧 360px `prd-panel`** 的一一对应结构，不是一张光秃秃的页面
    **策略型** —— 每个 section 是规则说明块（**不得出现空的 macos-window / prd-panel 壳**），且四段内容齐全：输入与输出 / 规则正文 / 边界与异常 / 可配置项；图必须自包含，**不引外部 CDN**
+
+**管理后台页面再加一条**：
+
+4. `@admin-theme` / `@admin-shell` 两对标记块已回填，且排在 `@proto-gen:theme` 之后——肉眼判据：主色是 EP 蓝 `#409eff`，不是紫色
 
 生成完 MUST 跑一次注入脚本，产物才是自包含单文件：
 

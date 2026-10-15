@@ -1,0 +1,110 @@
+/*
+ * Chinesia 管理后台原型主题 — Element Plus 2.13.7 / yudao-ui-admin-vue3
+ * ---------------------------------------------------------------------------
+ * 用途：管理后台（A3–A6）原型专用。考生端/官网原型不用本主题。
+ * 单一事实源：本文件。改这里，然后跑 ./sync-theme.mjs 刷新全部后台原型。
+ *
+ * 为什么不改 proto-gen 的全局 theme.css：
+ *   那是 skill 级共享资产（默认 tweakcn 724-1 紫），改它会让其他业务线的原型
+ *   在下次注入时一起变成 EP 蓝。故本主题以「页面局部覆盖」方式生效——
+ *   注入在 @proto-gen:theme 块之后，同选择器同优先级、后来者胜。
+ *
+ * 取值来源：Element Plus 2.13.7 theme-chalk 发布包 + yudao 源码 var.css（实测，非文档）
+ */
+
+:root {
+  /* ===== 主色与状态色（Element Plus 默认调色板） ===== */
+  --primary:                 #409eff;
+  --primary-foreground:      #ffffff;
+  --destructive:             #f56c6c;   /* EP danger */
+  --destructive-foreground:  #ffffff;
+
+  --success:            #67c23a;
+  --success-foreground: #ffffff;
+  --success-muted:      #f0f9eb;        /* EP light-9 */
+  --success-border:     #b3e19d;        /* EP light-5 */
+
+  --warning:            #e6a23c;
+  --warning-foreground: #ffffff;
+  --warning-muted:      #fdf6ec;
+  --warning-border:     #f3d19e;
+
+  --info:               #909399;
+  --info-foreground:    #ffffff;
+  --info-muted:         #f4f4f5;
+  --info-border:        #c8c9cc;
+
+  /* ===== 底色与文字 ===== */
+  --background:        #ffffff;
+  --foreground:        #303133;         /* EP text primary */
+  --card:              #ffffff;
+  --card-foreground:   #303133;
+  --popover:           #ffffff;
+  --popover-foreground:#303133;
+
+  /* 注意：此处刻意偏离 shadcn「muted-foreground = foreground」的约定。
+     EP 用颜色区分次级文字（#909399），不像 shadcn 靠 opacity/字号，对齐框架优先。 */
+  --muted:             #f5f7fa;         /* EP fill-light，用于表格 hover */
+  --muted-foreground:  #909399;         /* EP text secondary */
+
+  --secondary:            #f4f4f5;
+  --secondary-foreground: #606266;      /* EP text regular */
+  --accent:               #ecf5ff;      /* EP primary-light-9，选中/悬浮底 */
+  --accent-foreground:    #409eff;
+
+  --border: #dcdfe6;                    /* EP border-base */
+  --input:  #dcdfe6;
+  --ring:   #409eff;
+
+  /* ===== 圆角：EP 只有 4/2/20，必须显式写死 =====
+     不能沿用 proto-gen 的 calc() 阶梯——base 4px 会算出负值。 */
+  --radius:        4px;
+  --radius-chip:   2px;
+  --radius-sm:     2px;
+  --radius-btn:    4px;
+  --radius-panel:  4px;
+  --radius-card:   4px;
+  --radius-full:   9999px;
+
+  /* ===== 字体：EP 默认栈，yudao 未做任何覆盖 =====
+     不引 Google Fonts —— 原型离线可开，也与实现一致。 */
+  --font-sans: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* ===== 左侧菜单（yudao 深色菜单，非 EP 默认） ===== */
+  --sidebar:                    #001529;
+  --sidebar-foreground:         #bfcbd9;
+  --sidebar-primary:            #409eff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent:             #409eff;   /* 选中项底 = 主题色 */
+  --sidebar-accent-foreground:  #ffffff;   /* 选中项文字 */
+  --sidebar-border:             #001529;
+  --sidebar-ring:               #409eff;
+
+  /* ===== proto-gen 兼容别名 ===== */
+  --bg:            var(--background);
+  --surface:       var(--card);
+  --text:          var(--foreground);
+  --text-2:        #606266;
+  --text-3:        #a8abb2;              /* EP placeholder */
+  --border-2:      #e4e7ed;              /* EP border-light */
+  --primary-hover: #66b1ff;              /* EP primary-light-3，EP hover 是变亮不是变暗 */
+  --primary-light: #ecf5ff;
+  --error:         var(--destructive);
+
+  /* ===== yudao 布局尺寸（原型还原用，实测自源码 var.css） ===== */
+  --yd-logo-h:        50px;   /* logo 区 / 顶栏同高 */
+  --yd-side-w:        200px;  /* 侧栏展开 */
+  --yd-side-w-fold:   64px;   /* 侧栏折叠 */
+  --yd-tags-h:        35px;   /* 标签页 */
+  --yd-content-pad:   20px;   /* 内容区 padding */
+  --yd-content-bg:    #f5f7f9;/* 内容区底色（注意不是 EP 的 #f2f3f5） */
+  --yd-submenu-bg:    #0f2438;
+  --yd-card-gap:      15px;   /* ContentWrap 卡片间距 */
+  --yd-card-pad:      10px;   /* ContentWrap body padding */
+  --yd-ctl-h:         32px;   /* EP default 控件高 */
+  --yd-search-w:      240px;  /* 查询控件统一宽度 */
+  --yd-table-border:  #ebeef5;/* EP border-lighter，表格线 */
+  --yd-table-hover:   #f5f7fa;
+}

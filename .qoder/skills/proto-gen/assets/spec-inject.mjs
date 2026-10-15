@@ -75,6 +75,12 @@ const keyOf = (cap, title) => `${cap}#${norm(title)}`;
 function esc(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+// data-req 是 HTML 属性值，作者可能按惯例把 < > & " ' 写成实体（如 `&gt;`）；
+// 比对前 MUST 还原，否则标题含这些字符的 Requirement 会被误报死锚点、漏计覆盖率（b04 实例）
+function unescAttr(s) {
+  return s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+}
 // 极简 md 行内转换：先转义，再还原 **bold** / `code`
 function mdInline(s) {
   return esc(s)
@@ -285,7 +291,7 @@ function processHtml(html, specIndex, htmlPath) {
   const reqRe = /data-req="([^"]*)"/g;
   const reqTokens = []; // {pos, value}
   let m;
-  while ((m = reqRe.exec(html))) reqTokens.push({ pos: m.index, value: m[1] });
+  while ((m = reqRe.exec(html))) reqTokens.push({ pos: m.index, value: unescAttr(m[1]) });
 
   // 逐个 data-req：其后、且在下一个 data-req 之前，必须有一对 spec 标记
   let out = '';

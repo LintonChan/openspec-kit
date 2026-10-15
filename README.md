@@ -47,6 +47,7 @@ openspec/
   ├── conventions/       三份规范：评审 / 发布 / 协作
   ├── changes/           变更包
   ├── prototypes/        评审原型
+  ├── assets/admin-kit/  管理后台原型底座（yudao / Element Plus 主题 + CRUD 模板）
   ├── contracts/         跨包契约
   ├── review-raw/        评审纪要原件
   └── specs/             现行账本（只由 archive 写）

@@ -959,7 +959,7 @@ body { padding-top: 64px; }
   display: inline-flex; align-items: center; gap: 7px;
   border-radius: var(--radius-btn); border: 1px solid transparent;
   font-family: var(--font-sans); font-size: 13px; color: var(--text-2);
-  white-space: nowrap; cursor: pointer; user-select: none;
+  white-space: nowrap; cursor: pointer; -webkit-user-select: none; user-select: none;
   transition: background .15s, color .15s, border-color .15s;
 }
 .proto-tab:hover { background: color-mix(in oklch, var(--primary) 8%, transparent); color: var(--foreground); }
