@@ -97,7 +97,7 @@ SKILL.md 里还会指向 `references/` 下的细则（页面骨架、组件类�
    openspec/assets/admin-kit/sync-theme.mjs openspec/prototypes/NN-xxx/
    ```
 
-3. 缺组件 → 加进 `admin-shell.css`，**不要在页面样式里重定义 `.yd-*`**；admin-kit 由 openspec-kit 分发，改动回 kit
+3. 缺组件 → 加进 `admin-shell.css`。**页面样式里不得定义任何 `.yd-*` 类**（含底座还没有的）——`yd-` 是底座命名空间，私有类用包前缀，否则底座日后新增同名类会漏属性进来；admin-kit 由 openspec-kit 分发，改动回 kit
 
 ### 验收判据（人和 AI 都用这三条自查）
 

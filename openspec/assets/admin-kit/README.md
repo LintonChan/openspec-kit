@@ -37,15 +37,18 @@ openspec/assets/admin-kit/sync-theme.mjs openspec/prototypes/<change-name>/
 
 两条命令**顺序不能反**，且 `@admin-theme` 标记块在 HTML 里必须排在 `@proto-gen:theme` 之后——靠 CSS 后来者胜覆盖 proto-gen 的默认紫主题。脚本会校验，顺序不对直接报错。
 
-**缺组件时加进 `admin-shell.css`**，不要在页面样式里重定义 `.yd-*`——各页面副本会各自漂移。
+**缺组件时加进 `admin-shell.css`**。`yd-` 是底座的命名空间：页面样式里**不得定义任何 `.yd-*` 类**，包括底座里还没有的——页面私有类用包前缀（如 `.b05-xxx`）。
+为什么连「新起的」也不行：底座日后新增同名类时，页面没写到的属性会漏进来。06 的私有 `.yd-drawer` 就被后来底座加的同名抽屉撑宽过（`min-width:860px`）。
 
 ## 改主题
 
 在 **openspec-kit** 里改 `admin-theme.css`（主题）或 `admin-shell.css`（外壳组件），跑 `tools/sync-from-kit.sh` 推给产品仓，然后在产品仓跑：
 
 ```bash
-openspec/assets/admin-kit/sync-theme.mjs     # 不带参数 = 刷新本目录模板 + openspec/prototypes/ 下全部原型
+openspec/assets/admin-kit/sync-theme.mjs     # 不带参数 = 刷新本目录模板 + openspec/prototypes/ 下在制原型
 ```
+
+**不带参数时跳过 `prototypes/archive/`**：已归档原型是签字时的冻结快照，重刷等于回改已归档包。确需重刷就显式点名该文件。
 
 **不要去改 proto-gen 的全局 `theme.css`** —— 那是 skill 级共享资产，改了会让用户端原型下次注入时一起变成 EP 蓝。
 

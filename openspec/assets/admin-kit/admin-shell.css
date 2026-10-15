@@ -107,15 +107,37 @@
 
 /* ---- 搜索区：inline form，控件 240px，按钮同行（不可折叠） ---- */
 .yd-search { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 0; }
+/* 2026-08-25：工具条里的查询框按占位文案自适应宽度。
+   --yd-search-w(240px) 是「统一宽度」而不是「上限」——占位文案一长（如
+   「搜索昵称 / 姓名 / 中文名 / 英文名 / 用户ID / 登录账号」）就装不下。
+   配合 .yd-input 的 nowrap：短文案仍是 240px 对齐，长文案伸展而不折行、
+   也不被省略号截断。只作用于工具条，弹窗表单内的 .yd-input 不受影响。 */
+.yd-search .yd-input { width: auto; min-width: var(--yd-search-w); }
 .yd-field { display: flex; align-items: center; margin-right: 10px; }
+/* 2026-08-25：并排按钮之间补间距。Element Plus 的 el-button 默认带 margin-left，
+   本 kit 一直缺这条——单按钮时看不出来，工具条一放两个以上就贴成一片。
+   ⚠ 限定在 .yd-field 内：.yd-dialog-f 已有 gap:10px，不排除会叠加成 20px；
+   而 .yd-field 也用来包 label + input（.yd-label 自带 padding-right），
+   所以用相邻选择器只作用于按钮，不能直接给 .yd-field 加 gap。 */
+.yd-field .yd-btn + .yd-btn { margin-left: 10px; }
 .yd-label { width: 68px; text-align: right; padding-right: 12px; font-size: 14px; color: var(--secondary-foreground); }
 .yd-input {
   width: var(--yd-search-w); height: var(--yd-ctl-h);
   border: 1px solid var(--input); border-radius: var(--radius-btn);
   padding: 0 11px; font-size: 14px; color: var(--foreground);
   display: flex; align-items: center; background: #fff;
+  /* 2026-08-25：真实 <input> 的文本永不换行，原型里的仿输入框也不该换行。
+     缺这三行时长占位文案（如「搜索学校编号 / 学校名称 / 中文名 / 英文名」）
+     会折成两行、把控件撑高，与同排的下拉、按钮错位。 */
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .yd-input.ph { color: var(--text-3); }
+/* ── 字数计数器（el-input 的 show-word-limit 形态）· 2026-08-25 新增 ──
+   ⚠ 只用在**定义了长度上限**的输入框上：没有上限的计数器是一个没有分母的分数。
+   .yd-val 承载正文并自行省略；.yd-count 固定在右侧不参与收缩。 */
+.yd-input > .yd-val { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.yd-input > .yd-count { margin-left: auto; flex-shrink: 0; padding-left: 10px; font-size: 12px; color: var(--text-3); }
+.yd-input > .yd-count.max { color: var(--warning); }
 .yd-input .caret { margin-left: auto; color: var(--text-3); display: flex; }
 
 /* ---- 按钮：EP 尺寸 default = 32px ---- */
@@ -147,6 +169,8 @@
   border-bottom: 1px solid var(--yd-table-border); line-height: 23px;
 }
 .yd-table th .cell, .yd-table td .cell { padding: 0 12px; }
+/* 状态标签与操作链接均不折行；操作列多个链接时横排、装不下就横向滚而不是折行 */
+.yd-table .cell > .yd-badge, .yd-table .cell > .yd-tagchip { white-space: nowrap; }
 .yd-table tbody tr:hover td { background: var(--yd-table-hover); }
 .yd-check {
   width: 14px; height: 14px; border: 1px solid var(--input);
@@ -166,8 +190,27 @@
 .yd-tagchip.ok   { background: var(--success-muted); border-color: var(--success-border); color: var(--success); }
 .yd-tagchip.off  { background: var(--info-muted);    border-color: var(--info-border);    color: var(--info); }
 
+/* 状态徽章 .yd-badge：与 .yd-tagchip 同形（同高、同圆角、同边框），按语义取色。
+   无修饰 = 灰（未开始 / 停用）· ok / green = 已完成 · warn = 待处理 · err / red = 失败 · blue = 进行中。
+   翻译状态的「列表徽章」（`已确认数/启用语种数`，契约 C7 ①）恰用 ok / warn / err 三色。
+   2026-09-11 由 b02 / b03 / b05 / b06 / b07 五份页面副本收拢至此——五份形态已各自漂移：
+   b05 画成胶囊圆角、b03 的 err 引用了未定义的 token（红色徽章无底色）、b04 没有定义只剩纯文本。
+   各包 MUST NOT 再在页面样式里重定义 .yd-badge 及其颜色；只允许加包内独有的子元素（如 b06 的 .pulse）。 */
+.yd-badge {
+  display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px;
+  border-radius: var(--radius); font-size: 12px; white-space: nowrap;
+  background: var(--muted); border: 1px solid var(--border); color: var(--text-3);
+}
+.yd-badge.ok, .yd-badge.green { background: var(--success-muted);     border-color: var(--success-border);     color: var(--success); }
+.yd-badge.warn                { background: var(--warning-muted);     border-color: var(--warning-border);     color: var(--warning); }
+.yd-badge.err, .yd-badge.red  { background: var(--destructive-muted); border-color: var(--destructive-border); color: var(--destructive); }
+.yd-badge.blue                { background: #ecf5ff; border-color: #b3d8ff; color: var(--primary); }  /* EP primary light-9 / light-5 */
+
 /* 操作列：文字链接型 */
-.yd-link { color: var(--primary); font-size: 14px; cursor: pointer; margin: 0 6px; }
+/* 2026-08-25：加 nowrap。一个操作链接的文字被折成两行（如「停用」→「停/用」）
+   在任何原型里都不该出现——它是一个不可分割的动作名。列装不下时正解是加宽列，
+   不是把词拆开。 */
+.yd-link { color: var(--primary); font-size: 14px; cursor: pointer; margin: 0 6px; white-space: nowrap; }
 .yd-link.danger { color: var(--destructive); }
 .yd-link:hover { text-decoration: underline; }
 
@@ -204,12 +247,21 @@
 .yd-form-row { display: flex; align-items: flex-start; margin-bottom: 18px; }
 .yd-form-row:last-child { margin-bottom: 4px; }
 .yd-form-label {
-  width: 96px; text-align: right; padding-right: 12px; white-space: nowrap;
+  /* 2026-08-25：宽度改为变量。原写死 96px（只装得下 6 个中文字），等于假设
+     所有表单的 label 一样长——遇到「班级名（简体中文）」这类 9 字 label 就被
+     裁掉。表单 label 要右对齐、必须等宽，所以不能 width:auto；正解是让每个
+     表单按自己最长的 label 定宽：在 .yd-form 上覆盖 --yd-label-w 即可。 */
+  width: var(--yd-label-w, 96px); text-align: right; padding-right: 12px; white-space: nowrap;
   font-size: 14px; color: var(--secondary-foreground); flex-shrink: 0;
   line-height: var(--yd-ctl-h);   /* = 控件高，保证与输入框首行齐平 */
 }
 .yd-form-label .req { color: var(--destructive); margin-right: 4px; }
-.yd-form-ctl { flex: 1; }
+/* 2026-08-25：补 min-width:0。flex item 的默认 min-width:auto 会让它「不能
+   收缩到内容宽度以下」——.yd-input 加 nowrap 之后，一段长占位文案的 min-content
+   宽度就是整行文字宽，于是 .yd-form-ctl 被撑大、弹窗出现横向滚动。
+   这与 b02 那次「.sections-col 被挤到近乎零宽导致标题竖排」是同一类陷阱：
+   凡 flex 子项内部要靠 overflow 收敛的，都必须显式 min-width:0。 */
+.yd-form-ctl { flex: 1; min-width: 0; }
 .yd-form-ctl .yd-input { width: 100%; }
 .yd-hint { font-size: 12px; color: var(--text-3); margin-top: 6px; }
 .yd-radio { display: inline-flex; align-items: center; gap: 6px; margin-right: 24px; font-size: 14px; color: var(--secondary-foreground); }
@@ -444,7 +496,304 @@
 }
 .yd-group-tag.keep { border-color: var(--primary); color: var(--primary); }
 
-/* ── c01-content-iteration 新增：词汇表单四件套（与既有 yd-* 同族，后续包可复用） ── */
+/* ═══════════════════════════════════════════════════════════════════
+ * 抽屉 / 标签页 / 上传 / 多选下拉 —— 2026-08-25 随 b03-school-delivery 新增
+ * 三者均为 Element Plus / yudao 既有组件的原型化，**只新增类，不改既有类**。
+ * 加进 kit 而不是写在页面里：b03 的班级管理抽屉（B4-1）、年级 Tab、三处
+ * Excel 批量导入是通用形态，将来 b04 / b05 也会用到。
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 右侧滑出抽屉（el-drawer）────────────────────────────────────── */
+.yd-drawer {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 88%; min-width: 860px;
+  background: #fff; box-shadow: -8px 0 24px rgba(0, 0, 0, .12);
+  display: flex; flex-direction: column;
+  /* 2026-08-25 订正：原写 z-index:30，比 .yd-mask(40) 低，抽屉被蒙层整个盖住。
+     与 .yd-dialog 同层 41 —— 蒙层压住底层页面、叠加态浮在蒙层之上。 */
+  z-index: 41;
+}
+.yd-drawer-h {
+  flex-shrink: 0; height: 56px; padding: 0 18px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border-2); font-size: 15px; font-weight: 500;
+}
+.yd-drawer-h .sub { font-size: 12.5px; color: var(--text-3); font-weight: 400; }
+.yd-drawer-h .yd-dialog-tools { margin-left: auto; }
+.yd-drawer-b { flex: 1; overflow: hidden; display: flex; flex-direction: column; padding: 14px 18px; gap: 12px; }
+/* 抽屉内左右分栏：左=班级列表，右=学生列表 */
+.yd-drawer-split { flex: 1; display: flex; gap: 12px; min-height: 0; }
+.yd-drawer-split > .l { flex: 0 0 44%; display: flex; flex-direction: column; min-width: 0; }
+.yd-drawer-split > .r { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+/* ── 标签页（el-tabs · card 型）─────────────────────────────────── */
+.yd-tabs { display: flex; flex-wrap: wrap; gap: 0; border-bottom: 1px solid var(--border-2); flex-shrink: 0; }
+.yd-tab {
+  padding: 0 18px; height: 38px; line-height: 38px; font-size: 14px; color: var(--text-2);
+  border: 1px solid transparent; border-bottom: none; border-radius: 3px 3px 0 0;
+  margin-bottom: -1px; cursor: pointer; white-space: nowrap;
+}
+.yd-tab:hover { color: var(--primary); }
+.yd-tab.on { color: var(--primary); background: #fff; border-color: var(--border-2); border-bottom-color: #fff; font-weight: 500; }
+.yd-tab.off { color: var(--text-3); cursor: not-allowed; opacity: .5; }
+
+/* ── 文件上传（el-upload · drag 型）─────────────────────────────── */
+.yd-upload {
+  border: 1px dashed var(--border); border-radius: var(--radius); background: var(--muted);
+  padding: 26px 18px; text-align: center; cursor: pointer;
+}
+.yd-upload:hover { border-color: var(--primary); }
+.yd-upload svg { width: 34px; height: 34px; color: var(--text-3); opacity: .6; margin-bottom: 8px; }
+.yd-upload .t { font-size: 14px; color: var(--text-2); }
+.yd-upload .t em { color: var(--primary); font-style: normal; }
+.yd-upload .d { font-size: 12.5px; color: var(--text-3); margin-top: 5px; }
+.yd-upload-file {
+  display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 7px 11px;
+  border: 1px solid var(--border-2); border-radius: var(--radius); font-size: 13px;
+}
+.yd-upload-file svg { width: 15px; height: 15px; color: var(--success); }
+.yd-upload-file .x { margin-left: auto; color: var(--text-3); cursor: pointer; }
+
+/* ── 多选下拉（el-select multiple）：选中项以 tagchip 呈现 ───────── */
+.yd-multi {
+  width: 100%; min-height: var(--yd-ctl-h); border: 1px solid var(--input);
+  border-radius: var(--radius-btn); padding: 4px 28px 4px 7px; background: #fff;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 5px; position: relative;
+}
+.yd-multi.ph { color: var(--text-3); font-size: 14px; padding-left: 11px; align-items: center; }
+.yd-multi .caret { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); color: var(--text-3); display: flex; }
+.yd-multi .caret svg { width: 14px; height: 14px; }
+
+/* ── 统计小卡（导入结果按类计数）───────────────────────────────── */
+.yd-stat-row { display: flex; gap: 10px; }
+.yd-stat {
+  flex: 1; border: 1px solid var(--border-2); border-radius: var(--radius);
+  padding: 12px 14px; background: #fff;
+}
+.yd-stat .n { font-size: 24px; font-weight: 600; line-height: 1.2; }
+.yd-stat .l { font-size: 12.5px; color: var(--text-3); margin-top: 4px; }
+.yd-stat.ok  .n { color: var(--success); }
+.yd-stat.pend .n { color: var(--warning); }
+.yd-stat.skip .n { color: var(--text-3); }
+.yd-stat.err  .n { color: var(--destructive); }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * 可点开的下拉浮层 —— 2026-08-26 随 b03-school-delivery 新增
+ * 既有 .yd-dropdown 只定义了面板外观，摆位靠调用方；原型里要「真点得开」
+ * 就还缺一个定位外壳：面板须贴着控件下沿浮出、MUST NOT 把下方字段顶下去，
+ * 否则展开态看到的布局不是真实布局，评审就评了个假的。
+ * 只新增类，不改既有 .yd-dropdown / .yd-select / .yd-multi 的定义。
+ * ═══════════════════════════════════════════════════════════════════ */
+.yd-ddwrap { position: relative; }
+.yd-ddwrap > .yd-dropdown { position: absolute; top: 100%; left: 0; right: 0; z-index: 60; display: none; }
+.yd-ddwrap.open > .yd-dropdown { display: block; }
+.yd-ddwrap > .yd-select, .yd-ddwrap > .yd-multi { cursor: pointer; }
+/* 置灰态：MUST 连指针形状一起变，只变颜色不足以表达「点不开」 */
+.yd-ddwrap > .yd-select.ro, .yd-ddwrap > .yd-multi.ro { cursor: not-allowed; }
+.yd-ddwrap.open > .yd-select, .yd-ddwrap.open > .yd-multi { border-color: var(--primary); }
+/* 箭头翻转：.yd-multi 的 caret 是绝对定位 + translateY(-50%)，
+   MUST 连同原变换一起写，只写 rotate 会把它甩出垂直居中 */
+.yd-ddwrap > .yd-select .caret, .yd-ddwrap > .yd-multi .caret { transition: transform .18s; }
+.yd-ddwrap.open > .yd-select .caret { transform: rotate(180deg); }
+.yd-ddwrap.open > .yd-multi  .caret { transform: translateY(-50%) rotate(180deg); }
+
+/* 下拉内的选项行（el-option）：多选态左侧带 .yd-check */
+.yd-opt {
+  display: flex; align-items: center; gap: 8px; min-height: 34px; padding: 0 10px;
+  border-radius: var(--radius); font-size: 14px; color: var(--foreground);
+  cursor: pointer; white-space: nowrap;
+}
+.yd-opt:hover { background: var(--muted); }
+.yd-opt.on { color: var(--primary); font-weight: 500; }
+.yd-opt .code { font-family: var(--font-mono); }
+/* 下拉为空时的指引：MUST 说清为什么空、下一步去哪，MUST NOT 只留一片白 */
+.yd-dropdown-empty { padding: 16px 10px; text-align: center; font-size: 13px; color: var(--text-3); line-height: 1.75; }
+
+/* ── <a> 形态的按钮（真实文件下载）· 2026-08-26 随 b03 新增 ─────────
+ * 「下载模板」必须是真的 <a href download>，不能是 <button>——button 点了
+ * 什么都不会发生，而模板能不能下下来正是评审要验的东西。
+ * <a> 会带下划线与链接色：色已被 .yd-btn 的 color 覆盖，下划线还得单独去。 */
+a.yd-btn, a.yd-btn:hover, a.yd-btn:visited { text-decoration: none; }
+
+/* ── 手机号录入：国家区号 + 号码两段（el-input + prepend select 的原型化）──
+ * 2026-08-26 随 b03 新增。拆两段的理由见 student-enrollment spec：
+ * 区号必须是「选出来的」而不是「打出来的」，否则同一个号会以三种形态入库。 */
+.yd-phone { display: flex; gap: 8px; align-items: flex-start; }
+.yd-phone > .cc { flex: 0 0 168px; min-width: 0; }
+.yd-phone > .no { flex: 1; min-width: 0; }
+
+/* ── 三段计数单元格（学生数：全部 / 已注册 / 待注册）· 2026-08-26 随 b03 新增 ──
+ * MUST NOT 压成一个总数：「50 人里 48 人能上课」和「50 人里 12 人能上课」
+ * 是两件完全不同的事，一个总数把它们显示成一样。待注册数就是运营的待办量。 */
+.yd-cnt3 { display: inline-flex; align-items: baseline; gap: 5px; font-variant-numeric: tabular-nums; }
+.yd-cnt3 .t { font-size: 14px; color: var(--foreground); font-weight: 500; }
+.yd-cnt3 .sep { color: var(--border); }
+.yd-cnt3 .ok { font-size: 13px; color: var(--success); }
+.yd-cnt3 .pend { font-size: 13px; color: var(--warning); }
+.yd-cnt3 .pend.zero { color: var(--text-3); }
+/* 列表上方的三段计数条：与分页器同体量，MUST NOT 做成大卡片抢走表格的位置 */
+.yd-cntbar { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-3); padding: 2px 0 10px; }
+.yd-cntbar b { color: var(--foreground); font-variant-numeric: tabular-nums; }
+.yd-cntbar .ok b { color: var(--success); }
+.yd-cntbar .pend b { color: var(--warning); }
+
+/* ── 主名 + 编码的两行单元格（跨学校列表里 school_code 换行显示）──
+ * 跨校列表中校名会重名或高度相似，编码是唯一能一眼区分的标识；
+ * 换行而不是同行拼接，是为了不把这一列撑到需要横向滚动。 */
+.yd-name2 { line-height: 1.45; }
+.yd-name2 .m { font-size: 14px; color: var(--foreground); }
+.yd-name2 .c { font-size: 12px; color: var(--text-3); font-family: var(--font-mono); }
+/* <a> 形态的行内操作链接（如「新标签页打开」）：去掉 <a> 自带的下划线 */
+a.yd-link, a.yd-link:hover, a.yd-link:visited { text-decoration: none; }
+a.yd-link:hover { text-decoration: underline; }
+
+/* ── 行内操作链接的「状态性不可用」态 · 2026-08-26 随 b03 新增 ──────
+ * ⚠ MUST NOT 与「无权限」混用，两者的正解相反：
+ *   无权限   → MUST NOT 渲染（能力根本不存在，画出来只会让人反复点）
+ *   状态不允许 → MUST 置灰并可解释（能力存在，是这条记录当前不满足条件）
+ * 置灰保留了「这个班启用后就能做」这个信息，不渲染会把它抹掉。 */
+.yd-link.off { color: var(--text-3); cursor: not-allowed; opacity: .55; }
+.yd-link.off:hover { text-decoration: none; color: var(--text-3); }
+/* 失效的班级码：保留列位与等宽形态，MUST NOT 显示明文码 */
+.yd-code.void { color: var(--text-3); letter-spacing: normal; font-weight: 400; }
+
+/* ── 行内帮助图标（el-tooltip 的触发位）· 2026-08-26 随 b03 新增 ────
+ * ⚠ 为什么不让状态标签自己可点：标签**没有任何可点的视觉暗示**，
+ * 运营根本不知道那里有解释。问号是「此处有说明」的通用信号，
+ * 把「可点」这件事显性化。禁 emoji，一律用 SVG。 */
+.yd-help {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 17px; height: 17px; margin-left: 6px; vertical-align: middle;
+  color: var(--text-3); cursor: pointer; flex-shrink: 0;
+}
+.yd-help:hover { color: var(--primary); }
+.yd-help svg { width: 16px; height: 16px; }
+/* ⚠ .yd-help 是 flex 容器，proto-gen 给 [data-goto] 加的 ::after「↗」会成为
+   第二个 flex item 把图标挤扁（实测压到 2px）并撑到换行。问号本身就是入口
+   标识，不需要再叠一个箭头。 */
+.yd-help[data-goto]::after { display: none; content: none; }
+.yd-help svg { flex-shrink: 0; }
+/* 状态标签 + 帮助图标 MUST 同行：列窄时默认会把图标折到标签下面，
+   看起来像"标签下方多了个孤零零的按钮"。含 .yd-help 的单元格一律 nowrap。 */
+.yd-table .cell:has(.yd-help) { white-space: nowrap; }
+
+/* ── 可搜索下拉的搜索框（el-select filterable）· 2026-08-26 随 b03 新增 ──
+ * 跨学校列表的学校下拉 MUST 可搜：学校数随交付推进只增不减，
+ * 一个 200 项的纯滚动下拉不可用。搜索 MUST 同时命中名称与编号——
+ * 两者都是运营手上会有的线索。 */
+.yd-search-input {
+  width: 100%; height: 30px; box-sizing: border-box;
+  border: 1px solid var(--input); border-radius: var(--radius-btn);
+  padding: 0 10px; font-size: 13px; color: var(--foreground);
+  background: #fff; outline: none; font-family: inherit;
+}
+.yd-search-input:focus { border-color: var(--primary); }
+.yd-search-input::placeholder { color: var(--text-3); }
+/* 选项里的编码：等宽 + 弱化，主名在前、编码在后 */
+.yd-opt .sub { margin-left: auto; padding-left: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-3); }
+.yd-opt.on .sub { color: var(--primary); }
+
+/* ── 宽面板下拉（.wide）· 2026-08-26 随 b03 新增 ─────────────────
+ * 默认 .yd-ddwrap 的面板 left:0/right:0 跟随控件宽度——表单里对（控件本身就宽），
+ * 但工具栏里的筛选控件只有 ~94px，面板跟着变 94px 后：搜索框只剩 72px、
+ * 选项「Rangsit Wittayalai School（兰实中学） SCH0001」被整条截断。
+ * ⚠ 一个搜不动也读不全的搜索下拉，比不给搜索更糟——它宣称了一个用不了的能力。
+ * .wide 让面板**按内容展开**、只保证不窄于控件，并给触发器一个可读的下限。 */
+.yd-ddwrap.wide { min-width: 190px; }
+.yd-ddwrap.wide > .yd-dropdown {
+  right: auto; width: max-content; min-width: 100%; max-width: 420px;
+}
+.yd-ddwrap.wide .yd-search-input { height: 34px; font-size: 13.5px; }
+.yd-ddwrap.wide .yd-dropdown-search { padding: 2px 4px 10px; }
+/* 选项行：名称可省略、编码固定在右侧不参与收缩 */
+.yd-ddwrap.wide .yd-opt { min-height: 36px; }
+.yd-ddwrap.wide .yd-opt > .sub { flex-shrink: 0; }
+
+/* ── 数字步进器（el-input-number）· 2026-08-31 随 b04 新增 ───────────
+ * b04 的「连麦人数」要在 [2, 12] 之间取整数。用普通 .yd-input 让运营自己敲，
+ * 会同时引出三类错误——留空、小数、越界——而这三类前端都得拦。
+ * 步进器把「只能取范围内的整数」做成控件本身的性质，校验不必事后补。
+ * ⚠ 到边界时对应那一侧的按钮 MUST 置灰（.is-disabled）：
+ *   一个看起来能点、点了没反应的按钮，比直接禁用更让人以为是坏了。 */
+.yd-stepper { display: inline-flex; align-items: stretch; height: var(--yd-ctl-h); }
+.yd-stepper-btn {
+  width: 32px; flex: none; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--input); background: var(--muted);
+  color: var(--secondary-foreground); font-size: 15px; line-height: 1;
+  cursor: pointer; user-select: none;
+}
+.yd-stepper-btn:first-child { border-radius: var(--radius-btn) 0 0 var(--radius-btn); }
+.yd-stepper-btn:last-child { border-radius: 0 var(--radius-btn) var(--radius-btn) 0; }
+.yd-stepper-btn:hover { color: var(--primary); border-color: var(--primary); }
+.yd-stepper-btn.is-disabled,
+.yd-stepper-btn.is-disabled:hover {
+  color: var(--text-3); border-color: var(--input); cursor: not-allowed; opacity: .55;
+}
+.yd-stepper-val {
+  width: 62px; flex: none; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--input); border-left: 0; border-right: 0; background: #fff;
+  font-size: 14px; color: var(--foreground); font-variant-numeric: tabular-nums;
+}
+
+/* ── 可复制的标识单元格（ID + 复制图标）· 2026-08-31 随 b04 新增 ─────
+ * 供应商侧的 room_id / 资源ID 是拿去第三方后台对账用的长串。
+ * ⚠ 只显示不给复制，等于把「抄写一串 20+ 字符」这件事丢给运营——
+ *   抄错一位在对方后台查不到，而且查不出为什么错。这是这两张列表上
+ *   最容易出错、也最难自查的动作，所以复制入口 MUST 有。
+ * ⚠ 复制图标 MUST 常驻而非 hover 才出现：hover 才出现的入口，
+ *   在不知道它存在的人眼里等于不存在。 */
+.yd-idcell { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; }
+.yd-idcell__v {
+  font-family: var(--font-mono); font-size: 12.5px; color: var(--secondary-foreground);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.yd-idcell__c {
+  flex: none; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-btn); color: var(--text-3); cursor: pointer;
+}
+.yd-idcell__c:hover { background: var(--muted); color: var(--primary); }
+.yd-idcell__c svg { width: 13px; height: 13px; }
+/* 复制成功的就地反馈：贴着单元格出现，MUST NOT 用全局 toast——
+   列表里一次可能连着复制好几行，全局 toast 会盖住正在看的那几行。 */
+.yd-idcell__ok {
+  flex: none; padding: 0 6px; border-radius: 999px; font-size: 11px; line-height: 18px;
+  background: var(--success-muted, #f0f9eb); color: var(--success, #67c23a); white-space: nowrap;
+}
+
+/* ── .yd-select 的基础样式 · 2026-08-31 补 ────────────────────────
+ * ⚠ 这不是新增件，是补一个一直缺失的定义：kit 里只有 .yd-ddwrap 的若干
+ *   补充规则（cursor / 展开描边 / 箭头翻转），其中一条注释还写着「只新增
+ *   类，不改既有 .yd-select 的定义」——而那个定义从来就没存在过。
+ *   后果是所有 .yd-select 渲染成裸文字 + 箭头：在工具栏里挨着 .yd-input
+ *   还看不太出来，一进表单就露馅——同一张表单里别的字段都有框，就它没有。
+ * 形态 MUST 与 .yd-input 一致（同高、同边框、同圆角、同内边距），
+ * 否则同排的输入框与下拉会差半个像素地错位。 */
+.yd-select {
+  width: 100%; height: var(--yd-ctl-h); box-sizing: border-box;
+  border: 1px solid var(--input); border-radius: var(--radius-btn);
+  padding: 0 11px; font-size: 14px; color: var(--foreground);
+  display: flex; align-items: center; gap: 8px; background: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* 箭头恒贴右侧，MUST NOT 跟着文本走——文本长度不一时箭头会左右跳 */
+.yd-select > .caret { margin-left: auto; flex: none; color: var(--text-3); display: inline-flex; }
+.yd-select.ro { background: var(--muted); color: var(--text-3); }
+
+/* ── 跨包链接的落点偏移 · 2026-09-11 随 b07 新增 ─────────────────────────
+ * b07 的翻译工作台【去处理】以 <a href="../bXX/bXX.html#section-…" target="_blank">
+ * 新标签页跳到他包原型的对应屏（决议 D49）。浏览器原生锚点定位会把目标 section 顶到
+ * 视口 y=0，而 prd-highlight 插入的固定顶栏高 48px —— 屏标题与窗口标题栏被盖住。
+ * scroll-margin-top 只作用于锚点定位 / scrollIntoView，不影响页内 data-goto 的
+ * JS scrollTo（那条路径自带 64px 偏移），因此对既有交互零影响。
+ * 放在 admin-kit 而不是逐包写：落点偏移是「所有可被链接的后台原型」的共性，
+ * 写进底座一处即全线生效，MUST NOT 在各包页面样式里各补一份。 */
+.proto-stack { scroll-margin-top: 64px; }
+
+/* ── c01-content-iteration 新增：词汇表单四件套（与既有 yd-* 同族，后续包可复用） ──
+ * 2026-10-15 并入 kit 时与上方 b03/b04 的同类组件对齐（两条线并行，各写了一份）：
+ *   · 字数计数器：新页面一律用 .yd-input > .yd-count（el-input show-word-limit 形态）；
+ *     .yd-counter 只为 c01 既有原型保留，MUST NOT 再新用
+ *   · 抽屉：表单型（字段多的新增 / 编辑，560px）用 .yd-dialog.drawer；
+ *     列表 / 分栏型（如班级管理左右分栏，88%）用 .yd-drawer
+ *   · 长 label：.yd-lw 是 --yd-label-w:150px 的预设；别的宽度直接在 .yd-form 上覆盖变量 */
 /* 字数计数器：挂在 .yd-input 内右下角，仅用于有明确上限的字段 */
 .yd-counter { float: right; margin-left: auto; font-size: 12px; color: var(--text-3); font-family: var(--font-mono); }
 /* 多选 chip：词关系这类「一条记录多个取值」的场景 */
@@ -468,4 +817,4 @@
    EP / yudao 的 label-width 本就是按表单配置的，不是全局定死——
    既有页面标签都是 4~5 字（「重要程度」「所属场景」）故用 96px；
    c01 的「HSK3.0 等级映射」「是否拓展语法点」等字段名更长，须给所在表单加本类。 */
-.yd-lw .yd-form-label { width: 150px; }
+.yd-lw { --yd-label-w: 150px; }

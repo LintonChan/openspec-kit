@@ -18,6 +18,8 @@
   --primary-foreground:      #ffffff;
   --destructive:             #f56c6c;   /* EP danger */
   --destructive-foreground:  #ffffff;
+  --destructive-muted:       #fef0f0;   /* EP danger light-9 */
+  --destructive-border:      #fab6b6;   /* EP danger light-5 */
 
   --success:            #67c23a;
   --success-foreground: #ffffff;

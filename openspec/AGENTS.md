@@ -72,7 +72,7 @@ REPO=$(git -C "$(dirname "$(readlink -f openspec/config.yaml 2>/dev/null || echo
 <仓根>/openspec/assets/admin-kit/sync-theme.mjs <仓根>/openspec/prototypes/NN-xxx/
 ```
 
-缺组件加进 `admin-shell.css`，不在页面里重定义 `.yd-*`；admin-kit 由 openspec-kit 分发，改动回 kit。
+缺组件加进 `admin-shell.css`；页面样式里**不得定义任何 `.yd-*` 类**（`yd-` 是底座命名空间，私有类用包前缀）；admin-kit 由 openspec-kit 分发，改动回 kit。
 
 **验收三条**（不满足即为没走 skill，MUST 重做）：
 

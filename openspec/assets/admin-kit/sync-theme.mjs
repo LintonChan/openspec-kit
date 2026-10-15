@@ -22,7 +22,7 @@
  */
 
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
-import { join, dirname, extname, basename } from 'node:path';
+import { join, dirname, extname, basename, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -44,11 +44,18 @@ function collect(paths) {
   return out;
 }
 
-// 默认扫描范围：本目录（模板）+ openspec/prototypes/ 下全部原型
+// 默认扫描范围：本目录（模板）+ openspec/prototypes/ 下全部原型，但跳过 archive/
 // 原型按规范独立存放于 openspec/prototypes/<change-name>/，底座在 assets/admin-kit/
-const DEFAULTS = [here, join(here, '..', '..', 'prototypes')];
+//
+// 为什么默认跳过 archive/：已归档原型是签字时的冻结快照，底座却会持续演进——
+// 新增的通用类可能与归档页面里的同名私有类撞车（如 06 的 .yd-drawer 被底座的
+// min-width 撑宽），重刷等于回改已归档包。确需重刷就显式点名该文件。
+const PROTO = join(here, '..', '..', 'prototypes');
+const DEFAULTS = [here, PROTO];
 const inputs = process.argv.slice(2);
-const files = collect(inputs.length ? inputs : DEFAULTS.filter((d) => { try { statSync(d); return true; } catch { return false; } }));
+const files = collect(inputs.length ? inputs : DEFAULTS.filter((d) => { try { statSync(d); return true; } catch { return false; } }))
+  .filter((f) => inputs.length || !relative(PROTO, f).startsWith('archive' + sep));
+if (!inputs.length) console.log('  （默认跳过 prototypes/archive/：已归档原型是冻结快照，要重刷请显式点名文件）');
 
 let ok = 0, skipped = 0, failed = 0;
 
