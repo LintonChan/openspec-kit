@@ -161,6 +161,7 @@
       <a href="#sec-sidebar">侧栏</a>
       <a href="#sec-toggle">Toggle</a>
       <a href="#sec-progress">进度 / 动效</a>
+      <a href="#sec-diagram">策略配图</a>
       <a href="#sec-prd">PRD 旁注</a>
       <a href="#sec-tokens">Token 速查</a>
     </nav>
@@ -740,6 +741,109 @@
   </section>
 
   <!-- ============ PRD 旁注 ============ -->
+  <section class="comp-section" id="sec-diagram">
+    <h2>策略配图 · Diagram <span style="font-size:11px;font-weight:400;color:var(--text-3);margin-left:6px;">（策略型 section 专用，规范见 references/strategy-diagram.md）</span></h2>
+
+    <div class="comp-row" id="comp-diagram">
+      <div class="comp-row__meta">
+        <div class="comp-row__name">流程图 · Flowchart</div>
+        <div class="comp-row__class" data-copy="svg.pg-dg">svg.pg-dg</div>
+        <div class="comp-row__desc">内联 SVG，几何写属性、颜色字体走 .dg-* 类；≤9 节点、≤2 处焦点（.is-focal）；样例为 12 包「出门测自动选题流程」</div>
+      </div>
+      <div class="state-col" style="grid-column: span 4;"><span class="state-col__label">样例</span>
+        <div class="state-col__demo state-col__demo--stretch" style="overflow-x:auto;">
+<svg class="pg-dg" viewBox="0 0 1040 1012" width="1040" role="img" aria-labelledby="dg-exam-gen-title dg-exam-gen-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="dg-exam-gen-title">出门测自动选题流程</title>
+<desc id="dg-exam-gen-desc">教研点生成题目后，系统在有主帧的前提下从当前 lesson 的可用题目里建候选池、确定覆盖目标，再按新增覆盖数、难度、更新时间、题目ID 逐题挑选，直到人工题加自动题满 5 道或候选用完，最后输出并开放出门测。</desc>
+<defs>
+<marker id="dg-exam-gen-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" class="dg-head"/></marker>
+<marker id="dg-exam-gen-arrow-focal" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" class="dg-head is-focal"/></marker>
+</defs>
+<rect width="1040" height="1012" class="dg-bg"/>
+<path d="M400 56 V96" class="dg-edge" marker-end="url(#dg-exam-gen-arrow)"/>
+<path d="M528 148 H712" class="dg-edge" marker-end="url(#dg-exam-gen-arrow)"/>
+<path d="M400 200 V248" class="dg-edge" marker-end="url(#dg-exam-gen-arrow)"/>
+<path d="M400 364 V412" class="dg-edge" marker-end="url(#dg-exam-gen-arrow)"/>
+<path d="M400 568 V616" class="dg-edge" marker-end="url(#dg-exam-gen-arrow)"/>
+<path d="M400 728 V776" class="dg-edge" marker-end="url(#dg-exam-gen-arrow)"/>
+<path d="M140 854 H104 Q96 854 96 846 V680 Q96 672 104 672 H256" class="dg-edge is-focal" marker-end="url(#dg-exam-gen-arrow-focal)"/>
+<path d="M544 672 H712" class="dg-edge" marker-end="url(#dg-exam-gen-arrow)"/>
+<path d="M862 728 V776" class="dg-edge" marker-end="url(#dg-exam-gen-arrow)"/>
+<rect x="610" y="124" width="20" height="16" rx="2" class="dg-mask"/>
+<text x="620" y="136" class="dg-label" text-anchor="middle">否</text>
+<rect x="408" y="216" width="20" height="16" rx="2" class="dg-mask"/>
+<text x="418" y="228" class="dg-label" text-anchor="middle">是</text>
+<rect x="408" y="744" width="20" height="16" rx="2" class="dg-mask"/>
+<text x="418" y="756" class="dg-label" text-anchor="middle">是</text>
+<rect x="618" y="648" width="20" height="16" rx="2" class="dg-mask"/>
+<text x="628" y="660" class="dg-label" text-anchor="middle">否</text>
+<rect x="44" y="756" width="44" height="16" rx="2" class="dg-mask"/>
+<text x="66" y="768" class="dg-label is-focal" text-anchor="middle">下一轮</text>
+<rect x="290" y="16" width="220" height="40" rx="20" class="dg-terminal" stroke="currentColor"/>
+<text x="400" y="41" class="dg-name" text-anchor="middle">教研点【生成题目】</text>
+<polygon points="400,96.0 528.0,148 400,200.0 272.0,148" class="dg-decision"/>
+<text x="400" y="143" class="dg-dname" text-anchor="middle">导学与教学</text>
+<text x="400" y="163" class="dg-dname" text-anchor="middle">至少 1 个主帧？</text>
+<rect x="712" y="116" width="300" height="68" rx="20" class="dg-terminal" stroke="currentColor"/>
+<text x="862" y="144" class="dg-name" text-anchor="middle">阻止生成</text>
+<text x="862" y="166" class="dg-text" text-anchor="middle">出门测保持未生成</text>
+<rect x="140" y="248" width="520" height="116" rx="6" class="dg-node" stroke="currentColor"/>
+<rect x="156" y="264" width="60" height="16" rx="2" class="dg-chip"/>
+<text x="186" y="275.5" class="dg-chip-text" text-anchor="middle">STEP 2–3</text>
+<text x="226" y="277" class="dg-name" text-anchor="start">建候选池</text>
+<text x="156" y="304" class="dg-text" text-anchor="start">只取当前 lesson 关联题目的最新线上已审核通过、未停用版本</text>
+<text x="156" y="324" class="dg-text" text-anchor="start">排除：导学与教学帧已用的题 · 已保留的人工题 · 出门测里已有的题</text>
+<text x="156" y="344" class="dg-text" text-anchor="start">排除：手动移除过的自动题 · 书写 / 作文题（含此类小题的大题带小题）</text>
+<rect x="140" y="412" width="520" height="156" rx="6" class="dg-node" stroke="currentColor"/>
+<rect x="156" y="428" width="60" height="16" rx="2" class="dg-chip"/>
+<text x="186" y="439.5" class="dg-chip-text" text-anchor="middle">STEP 4–5</text>
+<text x="226" y="441" class="dg-name" text-anchor="start">定覆盖目标与已覆盖集合</text>
+<text x="156" y="468" class="dg-text" text-anchor="start">覆盖目标取第一个非空来源（词汇与语法点等权，各计 1）：</text>
+<text x="156" y="488" class="dg-text" text-anchor="start">① 词汇主帧、语法主帧关联的词汇和语法点（类型＋ID 去重，不含子帧）</text>
+<text x="156" y="508" class="dg-text" text-anchor="start">② 课程总结里手动关联的词汇和语法点</text>
+<text x="156" y="528" class="dg-text" text-anchor="start">③ 都没有 → 覆盖目标为空，各题新增覆盖数均计 0，照常生成</text>
+<text x="156" y="548" class="dg-text" text-anchor="start">已覆盖集合初值 = 已保留人工题覆盖到的目标</text>
+<polygon points="400,616.0 544.0,672 400,728.0 256.0,672" class="dg-decision"/>
+<text x="400" y="667" class="dg-dname" text-anchor="middle">人工题＋自动题 &lt; 5</text>
+<text x="400" y="687" class="dg-dname" text-anchor="middle">且候选池仍有题？</text>
+<rect x="140" y="776" width="520" height="156" rx="6" class="dg-node is-focal" stroke="currentColor"/>
+<rect x="156" y="792" width="48" height="16" rx="2" class="dg-chip is-focal"/>
+<text x="180" y="803.5" class="dg-chip-text is-focal" text-anchor="middle">STEP 6</text>
+<text x="214" y="805" class="dg-name" text-anchor="start">按优先级选 1 道</text>
+<text x="156" y="832" class="dg-text" text-anchor="start">① 新增覆盖数：能补上的未覆盖目标 多 → 少</text>
+<text x="156" y="852" class="dg-text" text-anchor="start">② 难度：2、3、4 级优先于 1、5 级（不排除，只排后）</text>
+<text x="156" y="872" class="dg-text" text-anchor="start">③ 题目更新时间：新 → 旧</text>
+<text x="156" y="892" class="dg-text" text-anchor="start">④ 题目 ID：小 → 大</text>
+<text x="156" y="912" class="dg-text" text-anchor="start">选中后：加入自动题 · 更新已覆盖集合 · 移出候选池</text>
+<rect x="712" y="612" width="300" height="116" rx="6" class="dg-node" stroke="currentColor"/>
+<rect x="728" y="628" width="48" height="16" rx="2" class="dg-chip"/>
+<text x="752" y="639.5" class="dg-chip-text" text-anchor="middle">STEP 7</text>
+<text x="786" y="641" class="dg-name" text-anchor="start">输出</text>
+<text x="728" y="668" class="dg-text" text-anchor="start">人工题保持原位置与顺序</text>
+<text x="728" y="688" class="dg-text" text-anchor="start">自动题依次填入其余位置</text>
+<text x="728" y="708" class="dg-text" text-anchor="start">总数 ≤ 5；不足 5 道保留实际数量</text>
+<rect x="712" y="776" width="300" height="108" rx="20" class="dg-terminal" stroke="currentColor"/>
+<text x="862" y="804" class="dg-name" text-anchor="middle">出门测开放</text>
+<text x="862" y="826" class="dg-text" text-anchor="middle">教研可增删、调序、预览</text>
+<text x="862" y="846" class="dg-text" text-anchor="middle">结果为 0 道时题数标红，</text>
+<text x="862" y="866" class="dg-text" text-anchor="middle">由教研从全题库手动添加</text>
+<line x1="28" y1="956" x2="1012" y2="956" class="dg-rule"/>
+<rect x="28" y="976" width="24" height="16" rx="8" class="dg-terminal"/>
+<text x="62" y="988" class="dg-label" text-anchor="start">起止 / 结果</text>
+<rect x="167" y="976" width="24" height="16" rx="4" class="dg-node"/>
+<text x="201" y="988" class="dg-label" text-anchor="start">处理步骤（编号对应上表）</text>
+<polygon points="393,974 405,984 393,994 381,984" class="dg-decision"/>
+<text x="415" y="988" class="dg-label" text-anchor="start">判断</text>
+<rect x="475" y="976" width="24" height="16" rx="4" class="dg-node is-focal"/>
+<text x="509" y="988" class="dg-label" text-anchor="start">核心规则</text>
+<path d="M593 984 H615" class="dg-edge is-focal" marker-end="url(#dg-exam-gen-arrow-focal)"/>
+<text x="627" y="988" class="dg-label" text-anchor="start">逐轮循环</text>
+</svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="comp-section" id="sec-prd">
     <h2>PRD 旁注 · PRD Panel <span style="font-size:11px;font-weight:400;color:var(--text-3);margin-left:6px;">（proto-gen 专属）</span></h2>
 

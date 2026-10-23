@@ -4,7 +4,7 @@ description: >
   生成高保真 HTML 原型文件。触发场景：用户提供某个页面/功能的构思、草稿或 PRD，想要快速生成
   对应的可视化 HTML 原型（含页面索引、macOS 窗口原型、旁注 PRD 面板）。
   也支持无界面的「策略说明」型产出（算法规则、契约、非功能约束）——同一套主题与注入流程，
-  但不套 macOS 窗口与 PRD 面板，改为规则说明块 + 按需 Mermaid 图。
+  但不套 macOS 窗口与 PRD 面板，改为规则说明块 + 按需手绘内联 SVG 图（pg-dg）。
   关键词：生成原型、新建原型、写原型、画原型、做个原型、出个原型、新增一个 html、新建 html 原型、策略说明。
   生成的 HTML 复用一套统一的设计系统（shared.css），遵循 references/ 下的内容规范。
 ---
@@ -36,8 +36,10 @@ description: >
 - ~~交互链路必须闭环~~ —— 策略型没有可点击操作
 
 **策略型的内容结构**（四段齐全：输入与输出 / 规则正文 / 边界与异常 / 可配置项）与 UML 选型规则，
-由 openspec 侧的 `config.yaml` `rules.prototypes` 在起草时注入，本文不重复。图用 Mermaid，
-**产物必须自包含，禁止引外部 CDN**。
+由 openspec 侧的 `config.yaml` `rules.prototypes` 在起草时注入，本文不重复。
+**图不用 Mermaid**，按 [`references/strategy-diagram.md`](references/strategy-diagram.md) 手写内联 SVG（`svg.pg-dg`）：
+颜色和字体走 shared.css 的 `.dg-*` 类，图跟着主题走；单图最多 9 个节点，6 条连线规则，中文按字符计宽、字号下限 12px。
+**产物必须自包含，禁止引外部 CDN。**
 
 > 类型应当在**拆包方案或 proposal 里已标注**。没标注就问用户，**不要默认成界面型**。
 
@@ -256,6 +258,7 @@ description: >
 | `references/default-theme.md` | proto-gen 默认主题（724-1）说明 + 切换流程 + token 全表 + 切换后必须手工补的 3 项 | 设备无关 |
 | `references/shadcn-tweakcn-theme.md` | **目标项目接入**：当原型要对齐业务项目自身主题时如何覆盖 `theme.css`（sidebar 子 token 陷阱 / 状态色派生 / 字体大小映射 / lucide 踩坑 / 自检清单） | 设备无关；项目接入场景 |
 | `references/prd-rules.md` | 面板两种模式（改写型 / 评审型）、PRD bullets 写法、元素描述模板、重复引用规则、评审型 `data-req` 锚点 + spec 注入 | 设备无关 |
+| `references/strategy-diagram.md` | **策略型配图**：何时画、选型、复杂度预算、6 条连线规则、中文排版、`.dg-*` 类名、SVG 骨架、自检 | 设备无关 |
 | `references/prd-highlight.md` | PRD ↔ 原型 双向 hover 联动：`data-comp` / `data-target` 命名约定 / scope / 交付剥离须知 | 设备无关 |
 
 ## 工作目录

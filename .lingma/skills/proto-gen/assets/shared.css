@@ -1052,3 +1052,33 @@ body { padding-top: 64px; }
 }
 [data-goto]:hover { text-decoration: underline; }
 [data-goto]:hover::after { opacity: 1; }
+
+/* ============ 策略型配图 · pg-dg（内联 SVG，规范见 references/strategy-diagram.md） ============
+ * 几何（坐标/尺寸）写在 SVG 属性里，颜色/字体只在这里按主题 token 定义——换主题图跟着换。
+ * 节点 rect 上保留 stroke="currentColor" 属性只为让几何校验识别为节点，实际颜色由下列类覆盖。
+ * 中文：字体沿用 --font-sans（中文字形走系统中文字体回退，与正文一致）；中文字号下限 12px。 */
+.pg-dg { display: block; margin: 0 auto; max-width: 100%; height: auto; font-family: var(--font-sans); }
+.pg-dg .dg-bg   { fill: var(--background); }
+.pg-dg .dg-mask { fill: var(--background); }
+/* 节点：步骤 / 判断 / 起止 / 焦点（焦点全图 ≤2 处） */
+.pg-dg .dg-node     { fill: var(--background); stroke: color-mix(in oklch, var(--foreground) 70%, transparent); stroke-width: 1; }
+.pg-dg .dg-decision { fill: var(--background); stroke: var(--foreground); stroke-width: 1.2; }
+.pg-dg .dg-terminal { fill: var(--muted); stroke: color-mix(in oklch, var(--foreground) 35%, transparent); stroke-width: 1; }
+.pg-dg .dg-node.is-focal, .pg-dg .dg-decision.is-focal { fill: color-mix(in srgb, var(--primary) 7%, var(--background)); stroke: var(--primary); stroke-width: 1.2; }
+/* 连线：默认灰、焦点主色、虚线=可选/回程 */
+.pg-dg .dg-edge          { fill: none; stroke: color-mix(in oklch, var(--foreground) 55%, transparent); stroke-width: 1.2; }
+.pg-dg .dg-edge.is-focal { stroke: var(--primary); }
+.pg-dg .dg-edge.is-dashed { stroke-dasharray: 5 4; }
+.pg-dg .dg-head          { fill: color-mix(in oklch, var(--foreground) 55%, transparent); }
+.pg-dg .dg-head.is-focal { fill: var(--primary); }
+/* 文字：节点名 14/600、正文 12/400、连线标签 12/500（中文不做大写/字距）、技术值用等宽 */
+.pg-dg .dg-name  { font-size: 14px; font-weight: 600; fill: var(--foreground); }
+.pg-dg .dg-dname { font-size: 13px; font-weight: 600; fill: var(--foreground); }
+.pg-dg .dg-text  { font-size: 12px; fill: color-mix(in oklch, var(--foreground) 72%, transparent); }
+.pg-dg .dg-label { font-size: 12px; font-weight: 500; fill: color-mix(in oklch, var(--foreground) 62%, transparent); }
+.pg-dg .dg-label.is-focal { fill: var(--primary); }
+.pg-dg .dg-chip  { fill: none; stroke: color-mix(in oklch, var(--foreground) 35%, transparent); stroke-width: .8; }
+.pg-dg .dg-chip.is-focal { stroke: color-mix(in oklch, var(--primary) 50%, transparent); }
+.pg-dg .dg-chip-text { font-family: var(--font-mono); font-size: 9px; font-weight: 500; letter-spacing: .08em; fill: color-mix(in oklch, var(--foreground) 62%, transparent); }
+.pg-dg .dg-chip-text.is-focal { fill: var(--primary); }
+.pg-dg .dg-rule  { stroke: var(--border); stroke-width: .8; }
