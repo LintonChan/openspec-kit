@@ -40,6 +40,7 @@ SYNC_FILES=(
   openspec/assets/admin-kit/crud-template.html
   openspec/assets/admin-kit/sync-theme.mjs
   tools/sync-proto-gen.sh
+  tools/check-open-items.sh
   tools/doctor.sh
   tools/sync-from-kit.sh
   tools/init-new-repo.sh

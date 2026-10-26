@@ -86,8 +86,19 @@ openspec/tools/build-prototypes-index.mjs      # 生成 openspec/prototypes-inde
 规则：
 - 一轮评审一个 R 节，只增不改（R2 推翻 R1 的，在 R2 里写明，R1 保留）
 - 记**结论**不记讨论过程；每条必有定位与原因
-- proposal 里的「评审待定项」每条都必须在某个 R 节里出现拍板结果
+- proposal 里的「评审待定项」每条都必须在某个 R 节里出现拍板结果，并在 proposal 里原地勾掉（`- [x] Qn … → 结论（Rn · 日期）`）
 - 「落点」由 AI 执行改动后回填，作为决议 → 文件的追溯链；凡改动了需求内容的决议，落点 MUST 同时含需求事实源的 A 编号与 spec 路径（见第四节）
+
+### 2.1 会外拍板同样开 R 节
+
+**待定项最常丢的地方不是评审会，是会外**：和 AI 对话时顺口定了、IM 里回了一句、口头跟研发交代了。这些结论只活在聊天记录和人脑里，spec 一个字没改，研发照 spec 做出来就是旧的。
+
+规则：**拍板不分场合，落账只有一处。** 会外定下的结论，与评审会决议走同一条路——
+
+- 开一个 R 节，渠道写明来源：`## R7 · 2026-10-26 · 会外（与 AI 对话 / IM / 口头，拍板人：xxx）`
+- R 号照常全局连续；没有原始记录的，`review-raw/` 里补一份三五行的纪要即可
+- 当场执行第三节第 5 步（回写需求事实源 → spec → proposal 勾掉 Qn → 回填落点），**不许「先记着回头再改」**
+- **有意不补的洞也是结论**：「这三种情况本期不处理」要写进 spec 的 Out of Scope 或对应 Requirement 的 `异常：不适用（原因）`，否则下一个读 spec 的人会当成遗漏
 
 ## 三、完整闭环（七步）
 
@@ -98,8 +109,10 @@ openspec/tools/build-prototypes-index.mjs      # 生成 openspec/prototypes-inde
 | 3 会后 | 原始记录丢进 `openspec/review-raw/`（全局一处，头部写明涉及哪些包），一句话通知 AI | PM |
 | 4 提炼 | AI 提炼成决议清单，含糊处反问，PM 确认 | AI ↔ PM |
 | 5 执行 | AI **先回写需求事实源（见第四节）**，再同步更新 spec / 原型旁注 / proposal（清待定项），写入 review-notes R 节并回填落点 | AI |
-| 6 验收 | AI 输出对照表（决议 → 落点 → 状态），PM 逐行核对 | PM |
+| 6 验收 | AI 跑 `tools/check-open-items.sh <包名>`，**不过不出对照表**；过了再输出对照表（决议 → 落点 → 状态），PM 逐行核对 | AI → PM |
 | 7 签字 | PM 回复确认 → AI 将状态改为「已签字（Rn）」→ 变更包进入待施工 | AI |
+
+`check-open-items.sh` 查三件事：未勾的 `- [ ] Qn`、spec 里残留的待定标记、没有异常覆盖的 Requirement（规则见 `config.yaml` 的 `rules.proposal` / `rules.specs`）。**归档前再跑一次**。
 
 通知 AI 的标准一句话：
 

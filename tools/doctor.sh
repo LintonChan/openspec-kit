@@ -88,10 +88,28 @@ tools_with_skill=$(find . -maxdepth 3 -path './.git' -prune -o -type d -name pro
 [[ "$tools_with_skill" -ge 2 ]] && ok "已铺给 $((tools_with_skill-1)) 家 AI 工具" \
   || note "只有基准副本，没铺给各家工具" "跑 tools/sync-proto-gen.sh（不影响使用，AI 读基准副本即可）"
 
+# config.yaml 能否被 openspec CLI 解析——解析失败时 CLI 只打一行 Warning 就整份忽略，
+# context 与 rules 全部不注入，validate 也不报。用 CLI 自带的 yaml 包解析，口径与 CLI 一致
+config_parse_error() {
+  local bin pkg
+  bin="$(command -v openspec 2>/dev/null)" || return 0
+  pkg="$(cd "$(dirname "$(readlink -f "$bin")")/.." && pwd)"
+  node -e '
+    const r = require("module").createRequire(process.argv[1] + "/package.json");
+    try { r("yaml").parse(require("fs").readFileSync(process.argv[2], "utf8")) }
+    catch (e) { console.log(e.message.split("\n")[0]) }' "$pkg" "$1" 2>/dev/null || true
+}
+
 # ── 5. 规范校验 ─────────────────────────────────────────────────────────────
 echo
 echo "[5/5] 规范校验"
 if command -v openspec >/dev/null 2>&1 && [[ -f openspec/config.yaml ]]; then
+  err="$(config_parse_error openspec/config.yaml)"
+  if [[ -n "$err" ]]; then
+    bad "config.yaml 解析失败，CLI 会整份忽略：$err" "常见原因：列表项以 ** 开头、正文里有英文「冒号+空格」"
+  else
+    ok "config.yaml 可被 openspec 解析"
+  fi
   out=$(openspec validate --all --strict 2>&1)
   if echo "$out" | grep -qi "no items found"; then
     ok "还没有变更包（新仓正常）"

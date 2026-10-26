@@ -75,6 +75,13 @@ git commit -am "同步 openspec-kit 通用层规则" && git push
 | `naming:` | 通用 | 从 kit 覆盖 |
 | `rules:` | 通用 | 从 kit 覆盖 |
 
+**写 `rules:` 条目的两个 YAML 坑**（踩中任一，CLI 只打一行 Warning 就**整份 config 忽略**，context 与 rules 全部失效，`validate` 也不报）：
+
+- 列表项**不能以 `**` 开头**（`- **xxx**…` 会被当成 YAML 别名）——把加粗挪到句中
+- 正文里**不能出现英文「冒号+空格」**（`Scenario: xxx` 会被当成键值对）——改全角冒号或换说法
+
+改完跑 `tools/doctor.sh`，第 5 步会用 CLI 同款解析器校验。
+
 所以 `sync-from-kit.sh` 对它做的是**键级合并**而不是整文件覆盖。产品仓要加自己的 artifact 规则时，注意它会在下次同步时被覆盖——**产品特有的起草规则应当写进 `context:` 的「纪律」段，不要写进 `rules:`**。
 
 ### 同步范围在哪定义

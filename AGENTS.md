@@ -33,6 +33,7 @@
 2. **未签字的包，MUST NOT 开下一个包。** 签字状态看该包 `review-notes.md` 的头部状态行。
 3. **「评审待定项」MUST NOT 由 AI 拍板。** 列出来交用户，用户没回答就不许写进 spec、更不许画进原型。
 4. **用户说「继续」「下一步」时，MUST 先确认是继续当前包的下一阶段，还是开下一个包。** 这两件事代价差一个数量级。
+5. **用户在对话里拍板了某条待定项，MUST 当场落账**：开会外 R 节 → 回写需求事实源与 spec → proposal 勾掉 `Qn`（见 `review-convention.md` 2.1）。MUST NOT 只在对话里答应「好的」——对话结束，结论就丢了。
 
 ### 显式覆盖：`keep momentum` 在本仓不成立
 
@@ -148,6 +149,7 @@ git push
 ## 四、提交前自检
 
 - 改过 `specs/` 或变更包 → 跑 `openspec validate --all --strict`
+- 要出验收对照表、签字或归档 → 跑 `tools/check-open-items.sh <包名>`，**不过不许往下走**
 - 改过 proto-gen 相关 → 跑 `tools/sync-proto-gen.sh --check`
 - 出过原型 → 按第二节三条验收判据自查
 - 有冲突 → `git pull --rebase` 后解决再推，不要 `--force`
@@ -191,5 +193,6 @@ git push
 - 评审决议改了需求 → **先回写 requirements.md 的对应条目，再改 spec**，两处缺一不可
 - spec 必须自包含，禁止用「详见某文档」代替规则本身
 - 列表页必须写全**列表五要素**（取值来源 / 排序 / 字段格式 / 缺省 / 分页），缺一条即退回重写
+- 每条 Requirement 必须**显式**覆盖异常：一条「异常：」开头的 Scenario，或一行 `异常：不适用（原因）`；拿不准怎么处理的异常列待定项（规则见 `config.yaml` 的 `rules.specs`）
 
 完整规范见 `openspec/conventions/` 三份：评审 / 发布 / 协作。

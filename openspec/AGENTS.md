@@ -33,6 +33,7 @@ REPO=$(git -C "$(dirname "$(readlink -f openspec/config.yaml 2>/dev/null || echo
 - 未签字的包，**MUST NOT 开下一个包**
 - 「评审待定项」**MUST NOT 由 AI 拍板**
 - 用户说「继续」时，**MUST 先确认**是继续当前包的下一阶段，还是开下一个包
+- 用户在对话里拍板待定项，**MUST 当场落账**（会外 R 节 → 回写事实源与 spec → 勾掉 `Qn`，见 `conventions/review-convention.md` 2.1），MUST NOT 只口头答应
 
 **`openspec-propose` / `opsx-propose` 里那句 `prefer making reasonable decisions to keep momentum`，在本仓被本节覆盖。** 这里的产出物是需求事实源，研发直接照着实现；AI 一路做下去的每个包都埋着没人评审过的决定，等人发现时几个包已互相焊死，返工成本是当初停下问一句的几十倍。
 
@@ -108,6 +109,7 @@ commit message 说清改了哪个变更包的什么、为什么改、依据哪�
 ## 四、提交前自检
 
 - 改过 `specs/` 或变更包 → `openspec validate --all --strict`
+- 要出验收对照表、签字或归档 → `<仓根>/tools/check-open-items.sh <包名>`，**不过不许往下走**
 - 改过 proto-gen 相关 → `<仓根>/tools/sync-proto-gen.sh --check`
 - 出过原型 → 按第二节三条验收判据自查
 - 有冲突 → `pull --rebase` 后解决再推，**不要 `--force`**
@@ -128,5 +130,6 @@ commit message 说清改了哪个变更包的什么、为什么改、依据哪�
 - 评审决议改了需求 → **先回写 `requirements.md` 的对应条目，再改 spec**，两处缺一不可
 - spec 必须自包含，禁止用「详见某文档」代替规则本身
 - 列表页必须写全**列表五要素**（取值来源 / 排序 / 字段格式 / 缺省 / 分页）
+- 每条 Requirement 必须**显式**覆盖异常：一条「异常：」开头的 Scenario，或一行 `异常：不适用（原因）`；拿不准怎么处理的异常列待定项（规则见 `config.yaml` 的 `rules.specs`）
 
 三份完整规范在 `conventions/`：评审 / 发布 / 协作。
